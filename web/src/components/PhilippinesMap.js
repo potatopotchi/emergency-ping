@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import Map, { NavigationControl } from 'react-map-gl';
+import Map, { NavigationControl, Marker } from 'react-map-gl';
+import { RiMapPinUserFill } from "react-icons/ri";
+import UserIcon from './UserIcon';
 
 const PhilippinesMap = ({
   longitude = 121.7740,
   latitude = 10.8797,
-  pitch = 35
+  pitch = 35,
+  markers = []
 }) => {
-
   const [zoomLevel, setZoomLevel] = useState(5);
 
   // Define the initial bounds and dynamically adjust them based on zoom level
@@ -54,6 +56,15 @@ const PhilippinesMap = ({
         onZoom={handleZoom}
       >
         <NavigationControl position="top-left" />
+        {markers.length > 0 && markers.map((marker) => (
+          <Marker latitude={marker.address[0]} longitude={marker.address[1]} key={marker.name}>
+            <UserIcon
+              color={marker.status === 'SAFE' ? 'green' : marker.status === 'NEED_HELP' ? 'grey' : 'red'}
+              size={zoomLevel > 7 ? 35 : 25}
+              userImage={zoomLevel > 7 ? marker.icon : null}
+            />
+          </Marker>
+        ))}
       </Map>
     </div>
   );
