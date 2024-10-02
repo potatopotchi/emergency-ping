@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { v4: uuid4 } = require('uuid');
+
 
 const Schema = mongoose.Schema;
 
@@ -13,9 +15,13 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-  }
+  },
+  fsUniquifier: {
+    type: String,
+    required: true,
+    default: uuid4,
+  },
 }, { timestamps: true });
-
 
 userSchema.statics.signUp = async function(email, password) {
   if (!(email && password)) {
@@ -65,12 +71,14 @@ userSchema.statics.signIn = async function(email, password) {
   return user;
 }
 
-userSchema.hasAnyRoles = async function(...roles) {
+userSchema.methods.hasAnyRoles = async function(...roles) {
   // Preparation for roles.
+  return true;
 }
 
-userSchema.hasAllRoles = async function(...roles) {
+userSchema.methods.hasAllRoles = async function(...roles) {
   // Preparation for roles.
+  return true;
 }
 
 

@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-
+const { v4: uuid4 } = require('uuid');
 const User = require('../models/userModel');
 
 
-const createToken = (_id) => {
-  return jwt.sign({_id}, process.env.SECRET, {expiresIn: '3d'});
+const createToken = (_id, fsUniquifier) => {
+  console.log(`fs: ${fsUniquifier}`);
+  return jwt.sign({ _id, fsUniquifier }, process.env.SECRET, {expiresIn: '3d'});
 }
 
 const createUser = async (req, res) => {
@@ -47,7 +48,8 @@ const updateUser = async (req, res) => {
   }
 
   const user = await User.findOneAndUpdate({_id: id}, {
-    ...req.body
+    ...req.body,
+    fsUniquifier: uuid4(),
   });
 
   if (!user) {
@@ -81,7 +83,7 @@ const signUpUser = async (req, res) => {
       email,
       password,
     )
-    const token = createToken(user._id);
+    const token = createToken(user._id, user.fsUniquifier);
 
     res.status(200).json({email, token});
 
@@ -95,7 +97,7 @@ const signInUser = async (req, res) => {
 
   try {
     const user = await User.signIn(email, password);
-    const token = createToken(user._id);
+    const token = createToken(user._id, user.fsUniquifier);
 
     res.status(200).json({email, token});
 

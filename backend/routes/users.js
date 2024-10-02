@@ -1,5 +1,4 @@
 const express = require('express');
-
 const {
   createUser,
   getUsers,
@@ -9,8 +8,8 @@ const {
   signUpUser,
   signInUser,
 } = require('../controllers/usersController');
-const requireAuth = require('../middleware/requireAuth');
-const unless = require('../utils/middleware');
+const requireAuth = require('../middleware/auth');
+const unless = require('../core/middleware');
 
 const router = express.Router();
 
