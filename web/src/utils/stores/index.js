@@ -9,9 +9,7 @@ const useUserAuthStore = create((set) => ({
         roles: [],
         token: null,
     },
-    setUserAuth: ({
-        userAuth
-    }) => set((state) => ({ 
+    setUserAuth: (userAuth) => set((state) => ({ 
         userAuth: {
             ...state.userAuth,
             ...userAuth

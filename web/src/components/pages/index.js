@@ -1,2 +1,2 @@
-export { default as AdminHomepage } from "./AdminHomepage";
-export { default as EmployeeHomepage } from "./EmployeeHomepage";
+export { default as Homepage } from "./Homepage";
+export { default as LoginPage } from "./Login";

@@ -3,6 +3,7 @@ const getUserAuth = async (baseUrl, token) => {
     // TODO Insert BE endpoint call here
 
     const res = {
+        status: 200,
         id: "userId1",
         firstName: "Employees",
         lastName: "Mustwashhands",
