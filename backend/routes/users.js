@@ -1,24 +1,28 @@
 const express = require('express');
-const User = require('../models/userModel');
+
+const {
+  createUser,
+  getUsers,
+  getUser,
+  updateUser,
+  deleteUser,
+  signUpUser,
+  signInUser,
+} = require('../controllers/usersController');
+const requireAuth = require('../middleware/requireAuth');
+const unless = require('../utils/middleware');
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-  const {username, email, password} = req.body;
+router.use(unless({ paths: ['/signup', '/signin'] }, requireAuth));
 
-  try {
-    const user = await User.create({username, email, password});
-    res.status(200).json(user);
-  
-  } catch (error) {
-    res.status(400).json({error: error.message});
-  }
-});
+router.post('/', createUser);
+router.get('/', getUsers);
+router.get('/:id', getUser);
+router.put('/:id', updateUser);
+router.delete('/:id', deleteUser);
+router.post('/signup', signUpUser);
+router.post('/signin', signInUser);
 
-router.get('/', (req, res) => {
-  res.json({
-    message: 'User'
-  })
-});
 
 module.exports = router;
