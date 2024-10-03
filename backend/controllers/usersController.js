@@ -53,7 +53,7 @@ const updateUser = async (req, res) => {
   });
 
   if (!user) {
-    res.status(404).json({error: 'No such user'});
+    return res.status(404).json({error: 'No such user'});
   }
 
   res.status(200).json(user);
@@ -69,7 +69,7 @@ const deleteUser = async (req, res) => {
   const user = await User.findOneAndDelete({_id: id});
 
   if (!user) {
-    res.status(404).json({error: 'No such user'});
+    return res.status(404).json({error: 'No such user'});
   }
 
   res.status(200).json(user);

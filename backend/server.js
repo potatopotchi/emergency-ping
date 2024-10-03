@@ -18,8 +18,10 @@ app.get('/api/message', (req, res) => {
 
 // Register routers
 const apiRouter = express.Router();
+const authRouter = require('./routes/auth');
 const userRouter = require('./routes/users');
 
+apiRouter.use('/auth', authRouter);
 apiRouter.use('/users', userRouter);
 app.use('/api', apiRouter);
 
