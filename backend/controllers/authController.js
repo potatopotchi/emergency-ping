@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
+const { v4: uuid4 } = require('uuid');
+const validator = require('validator');
+const { hashPassword } = require('../core/utils');
 
 
 const createToken = (_id, fsUniquifier, expiresIn) => {
@@ -10,10 +13,22 @@ const signUpUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.signUp(
-      email,
-      password,
-    )
+    if (!email || !password) {
+      throw Error('Missing fields');
+    }
+    if (!validator.isEmail(email)) {
+      throw Error('Email not valid');
+    }
+    if (!validator.isStrongPassword(password)) {
+      throw Error('Password not strong enough');
+    }
+
+    const user = await User.create({
+      ...req.body,
+      password: await hashPassword(password),
+      fsUniquifier: uuid4(),
+    });
+
     const accessToken = createToken(user._id, user.fsUniquifier, '1h');
     const refreshToken = createToken(user._id, user.fsUniquifier, '1d');
 

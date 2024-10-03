@@ -1,17 +1,29 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const { v4: uuid4 } = require('uuid');
+const validator = require('validator');
+const { hashPassword } = require('../core/utils');
 const User = require('../models/userModel');
 
 
-const createToken = (_id, fsUniquifier) => {
-  console.log(`fs: ${fsUniquifier}`);
-  return jwt.sign({ _id, fsUniquifier }, process.env.SECRET, {expiresIn: '3d'});
-}
-
 const createUser = async (req, res) => {
   try {
-    const user = await User.create({...req.body});
+    if (!email || !password) {
+      throw Error('Missing fields');
+    }
+    if (!validator.isEmail(email)) {
+      throw Error('Email not valid');
+    }
+    if (!validator.isStrongPassword(password)) {
+      throw Error('Password not strong enough');
+    }
+
+    const user = await User.create({
+      ...req.body,
+      password: await hashPassword(password),
+      fsUniquifier: uuid4(),
+    });
+
     res.status(200).json(user);
 
   } catch (error) {
@@ -47,13 +59,27 @@ const updateUser = async (req, res) => {
     return res.status(404).json({error: 'No such user'});
   }
 
+  const { email, password } = req.body;
+
+  if (email && !validator.isEmail(email)) {
+    return res.status(400).json({ error: 'Email is not valid' });
+  }
+
+  if (password) {
+    if (!validator.isStrongPassword(password)) {
+      return res.status(400).json({ error: 'Password not strong enough' });
+    }
+
+    req.body.password = await hashPassword(password);
+  }
+
   const user = await User.findOneAndUpdate({_id: id}, {
     ...req.body,
     fsUniquifier: uuid4(),
   });
 
   if (!user) {
-    return res.status(404).json({error: 'No such user'});
+    res.status(404).json({error: 'No such user'});
   }
 
   res.status(200).json(user);
@@ -69,41 +95,10 @@ const deleteUser = async (req, res) => {
   const user = await User.findOneAndDelete({_id: id});
 
   if (!user) {
-    return res.status(404).json({error: 'No such user'});
+    res.status(404).json({error: 'No such user'});
   }
 
   res.status(200).json(user);
-}
-
-const signUpUser = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.signUp(
-      email,
-      password,
-    )
-    const token = createToken(user._id, user.fsUniquifier);
-
-    res.status(200).json({email, token});
-
-  } catch (error) {
-    res.status(400).json({error: error.message});
-  }
-}
-
-const signInUser = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.signIn(email, password);
-    const token = createToken(user._id, user.fsUniquifier);
-
-    res.status(200).json({email, token});
-
-  } catch (error) {
-    res.status(400).json({error: error.message});
-  }
 }
 
 
@@ -113,6 +108,4 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
-  signUpUser,
-  signInUser,
 };
