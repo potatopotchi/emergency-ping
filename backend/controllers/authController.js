@@ -6,7 +6,7 @@ const { hashPassword } = require('../core/utils');
 
 
 const createToken = (_id, fsUniquifier, expiresIn) => {
-  return jwt.sign({ _id, fsUniquifier }, process.env.SECRET, { expiresIn });
+  return jwt.sign({ _id, fsUniquifier }, process.env.JWT_SECRET, { expiresIn });
 }
 
 const signUpUser = async (req, res) => {
@@ -70,7 +70,7 @@ const refreshUserToken = async (req, res) => {
   }
 
   try {
-    const { _id, fsUniquifier } = jwt.verify(token, process.env.SECRET);
+    const { _id, fsUniquifier } = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ _id, fsUniquifier }).select('_id');
 
     if (!user) {
