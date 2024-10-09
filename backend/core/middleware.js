@@ -6,7 +6,7 @@ const unless = function({paths}, middleware) {
       return middleware(req, res, next);
     }
   };
-};
+}
 
 
 module.exports = unless;
