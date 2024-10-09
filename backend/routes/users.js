@@ -6,18 +6,18 @@ const {
   updateUser,
   deleteUser,
 } = require('../controllers/usersController');
-const requireAuth = require('../middleware/auth');
-const unless = require('../core/middleware');
+const { authorizeAnyRoles, requireAuthentication } = require('../middleware/auth');
+
 
 const router = express.Router();
 
-router.use(unless({ paths: ['/signup', '/signin'] }, requireAuth));
+router.use(requireAuthentication);
 
-router.post('/', createUser);
-router.get('/', getUsers);
+router.post('/', authorizeAnyRoles('superuser'), createUser);
+router.get('/', authorizeAnyRoles('superuser', 'admin'), getUsers);
 router.get('/:id', getUser);
 router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
+router.delete('/:id', authorizeAnyRoles('superuser'), deleteUser);
 
 
 module.exports = router;
