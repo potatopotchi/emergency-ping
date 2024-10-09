@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
+const { verifyUserToken } = require('../core/utils');
 const User = require('../models/userModel');
 
 
-const requireAuth = async (req, res, next) => {
+const requireAuthentication = async (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -12,8 +13,8 @@ const requireAuth = async (req, res, next) => {
   const token = authorization.split(' ')[1];
 
   try {
-    const { _id, fsUniquifier } = jwt.verify(token, process.env.SECRET);
-    const user = await User.findOne({ _id, fsUniquifier }).select('_id');
+    const { _id, fsUniquifier } = verifyUserToken(token);
+    const user = await User.findOne({ _id, fsUniquifier });
 
     if (!user) {
       throw Error();
@@ -23,9 +24,31 @@ const requireAuth = async (req, res, next) => {
     next();
   
   } catch (error) {
-    res.status(401).json({error: 'Request is not authorized'});
+    res.status(401).json({error: 'Request not authorized'});
   }
 }
 
+const authorizeAnyRoles = (...roles) => {
 
-module.exports = requireAuth;
+  return async function(req, res, next) {
+    try {
+      if (!req.user) {
+        throw Error();
+      
+      } else if (!req.user.roles.some((role) => roles.includes(role))) {
+        throw Error();
+      }
+
+      next();
+    
+    } catch (error) {
+      res.status(401).json({error: 'Request not allowed'});
+    }
+  };
+}
+
+
+module.exports = {
+  authorizeAnyRoles,
+  requireAuthentication,
+};
