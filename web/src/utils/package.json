@@ -1,0 +1,14 @@
+{
+  "name": "@synergy-project-t/utils",
+  "version": "1.0.0",
+  "description": "Utility functions for synergy project by Team T",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "utils"
+  ],
+  "author": "",
+  "license": "ISC"
+}

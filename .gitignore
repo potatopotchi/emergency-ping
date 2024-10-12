@@ -46,5 +46,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-
-.vs/
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+/.vs

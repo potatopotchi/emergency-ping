@@ -1,0 +1,114 @@
+{
+    "mappings": [
+        {
+            "request": {
+                "urlPath": "/api/getEmployeeLocations",
+                "method": "POST",
+                "headers": {
+                    "x-api-key": {
+                        "equalTo": "test-api-key"
+                        
+                    },
+                    "authorization": {
+                            "equalTo": "Bearer test-auth-token"
+                        }
+                }
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "jsonBody": {
+                    "data": [
+                        {
+                            "email": "admin1@example.com",
+                            "Name": "Admin Only",
+                            "location": "REG7_CEBU_CEBU_CITY",
+                            "status": "SAFE",
+                            "nearestLocations":[
+                                {
+                                    "name": "Admin Coffee Shop",
+                                    "vicinity": "123 Cebu City, Cebu",
+                                    "types": ["cafe", "point_of_interest", "establishment"]
+                                },
+                                {
+                                    "name": "SM Cebu City",
+                                    "vicinity": "456 Cebu City, Cebu",
+                                    "types": ["shopping_mall", "point_of_interest", "establishment"]
+                                },
+                                {
+                                    "name": "Cebu Municipal Hall",
+                                    "vicinity": "Cebu City, Cebu",
+                                    "types": ["local_government_office", "point_of_interest", "establishment"]
+                                },
+                                {
+                                    "name": "Cebu Evacuation Center",
+                                    "vicinity": "Cebu City, Cebu",
+                                    "types": ["community_center", "point_of_interest"]
+                                }
+                            ]
+                        },
+                        {
+                            "email": "admin1@example.com",
+                            "Name": "Super Admin",
+                            "location": "REG7_CEBU_CEBU_CITY",
+                            "status": "DISTRESS",
+                            "nearestLocations":[
+                                {
+                                    "name": "Admin Coffee Shop",
+                                    "vicinity": "123 Cebu City, Cebu",
+                                    "types": ["cafe", "point_of_interest", "establishment"]
+                                },
+                                {
+                                    "name": "SM Cebu City",
+                                    "vicinity": "456 Cebu City, Cebu",
+                                    "types": ["shopping_mall", "point_of_interest", "establishment"]
+                                },
+                                {
+                                    "name": "Cebu Municipal Hall",
+                                    "vicinity": "Cebu City, Cebu",
+                                    "types": ["local_government_office", "point_of_interest", "establishment"]
+                                },
+                                {
+                                    "name": "Cebu Evacuation Center",
+                                    "vicinity": "Cebu City, Cebu",
+                                    "types": ["community_center", "point_of_interest"]
+                                }
+                              ]
+                        },
+                        {
+                            "email": "nicole@codev.com",
+                            "Name": "Nicole Sumaoang",
+                            "location": "REG3_TARLAC_GERONA",
+                            "status": "SAFE",
+                            "nearestLocations":[
+                                {
+                                    "name": "Coffee Shop 1",
+                                    "vicinity": "123 Gerona, Tarlac",
+                                    "types": ["cafe", "point_of_interest", "establishment"]
+                                },
+                                {
+                                    "name": "Gerona Mall",
+                                    "vicinity": "456 Gerona, Tarlac",
+                                    "types": ["shopping_mall", "point_of_interest", "establishment"]
+                                },
+                                {
+                                    "name": "Gerona Municipal Hall",
+                                    "vicinity": "Gerona, Tarlac",
+                                    "types": ["local_government_office", "point_of_interest", "establishment"]
+                                },
+                                {
+                                    "name": "Gerona Civic Center",
+                                    "vicinity": "Gerona, Tarlac",
+                                    "types": ["community_center", "point_of_interest"]
+                                }
+                              ]
+                        }
+                    ],
+                    "errors": null
+                }
+            }
+        }
+    ]
+}
