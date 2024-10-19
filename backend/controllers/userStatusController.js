@@ -1,3 +1,4 @@
+const User = require('../models/userModel');
 const UserStatus = require('../models/userStatusModel');
 const {
   deriveGetManyEndpoint,
@@ -28,7 +29,7 @@ const createRecord = async (req, res) => {
         _id: { '$ne': record._id }
       },
       { status: 'EXPIRED' },
-    )
+    );
 
     return res.status(200).json(record);
 
