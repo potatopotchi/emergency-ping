@@ -16,7 +16,7 @@ const App = () => {
     <AuthWrapper>
       <div className="flex flex-col h-screen bg-[#fbfbfb]">
         <Navbar />
-        <div className='flex flex-col h-[100%] p-5'>
+        <div className='flex flex-col h-[100%] p-5 overflow-y-hidden'>
           <Outlet />
         </div>
       </div>

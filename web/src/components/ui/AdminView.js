@@ -79,7 +79,9 @@ const AdminView = () => {
                     <PhilippineMap zoomLevel={5} markers={markers} onMarkerClick={handleMarkerClick}/>
                 </div>
             </div>
-            <MapGroupSection viewId={viewId}/>
+            <div className="w-[600px] h-[100%] flex flex-col relative">
+              <MapGroupSection viewId={viewId}/>
+            </div>
         </div>
     );
 };
