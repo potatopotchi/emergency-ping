@@ -54,7 +54,6 @@ Make sure you have the following installed:
     cd backend
     node server.js
     ```
-
 ## Run local frontend
 
     Set up the frontend:
@@ -69,3 +68,22 @@ Make sure you have the following installed:
      cd web
     npm start
     ```
+
+## Run local frontend
+
+    Set up the frontend:
+
+    ```Shell
+    cd ./backend
+    ```
+    Build the `dockerfile` using the file below:
+
+    ```Shell
+     docker build -t backend .
+    ```
+    Run the command below to start wiremock on port 3000
+
+    ```Shell
+    docker-compose up
+    ```
+    

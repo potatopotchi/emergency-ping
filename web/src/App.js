@@ -1,27 +1,51 @@
-import React, { useEffect, useState } from 'react';
+//import React, { useEffect, useState } from 'react';
 import './index.css';
-import Navbar from './components/Navbar';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet
+} from "react-router-dom";
+import { Navbar } from "@synergy-project-t/ui-components";
+import { AuthWrapper } from "@synergy-project-t/data-wrappers";
+import { LoginPage, Homepage, ProfilePage } from "@synergy-project-t/pages";
+
 
 const App = () => {
-  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    const fetchMessage = async () => {
-      const response = await fetch('http://localhost:5000/api/message');
-      const data = await response.json();
-      setMessage(data.message);
-    };
+  const MainApp = 
+    <AuthWrapper>
+      <div className="flex flex-col h-screen bg-[#fbfbfb]">
+        <Navbar />
+        <div className='flex flex-col h-[100%] p-5'>
+          <Outlet />
+        </div>
+      </div>
+    </AuthWrapper>;
 
-    fetchMessage();
-  }, []);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: MainApp,
+      children: [
+        {
+          index: true,
+          path: "",
+          element: <Homepage />,
+        },
+        {
+          path: "login",
+          element: <LoginPage />,
+        },
+        {
+          path: "profile",
+          element: <ProfilePage />,
+        },
+      ],
+    },
+  ]);
 
   return (
-    <div className="flex flex-col h-screen">
-      <Navbar />
-      <div className="flex-grow flex items-center justify-center bg-gray-100">
-        <h1 className="text-4xl font-bold text-blue-600">{message || "Loading..."}</h1>
-      </div>
-    </div>
+        <RouterProvider router={router} />
   );
 };
 

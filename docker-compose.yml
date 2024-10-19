@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  node-app:
+    build: ./backend
+    ports:
+      - "3000:5000"
+
+  react-app:
+    build: ./web
+    ports:
+      - "3001:3000"
+    depends_on:
+      - node-app
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    hostname: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongodb-data:/data/db/
+      - mongodb-log:/var/log/mongodb/
+
+  wiremock:
+    image: rodolpheche/wiremock
+    ports:
+      - "8081:8080"  # Expose WireMock on port 8081
+    volumes:
+      - ./backend/mock-mappings:/home/wiremock/mappings  # Mount your mappings directory
+
+volumes:
+  mongodb-data:
+    driver: local
+    name: mongo-data
+
+  mongodb-log:
+    driver: local
+    name: mongo-log
