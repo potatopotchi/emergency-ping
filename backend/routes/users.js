@@ -5,6 +5,7 @@ const {
   getUser,
   updateUser,
   deleteUser,
+  getNearestPlaces
 } = require('../controllers/usersController');
 const { authorizeAnyRoles, requireAuthentication } = require('../middleware/auth');
 
@@ -18,6 +19,6 @@ router.get('/', authorizeAnyRoles('superuser', 'admin'), getUsers);
 router.get('/:id', getUser);
 router.put('/:id', updateUser);
 router.delete('/:id', authorizeAnyRoles('superuser'), deleteUser);
-
+router.get('/locations/nearest', getNearestPlaces);
 
 module.exports = router;

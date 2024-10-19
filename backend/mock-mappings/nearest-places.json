@@ -1,0 +1,122 @@
+{
+    "mappings": [
+        {
+            "request": {
+                "method": "GET",
+                "urlPathPattern": "/locations/nearest",
+                "queryParameters": {
+                    "amenity": {
+                        "matches": "mall,cafe,restaurant"
+                    },
+                    "locationCode": {
+                        "matches": "REG7_CEBU_CEBU_CITY"
+                    }
+                },
+                "headers": {
+                    "x-api-key": {
+                        "equalTo": "test-api-key"
+                    },
+                    "authorization": {
+                        "equalTo": "Bearer test-auth-token"
+                    }
+                }
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "jsonBody": {
+                    "success": true,
+                    "data": [
+                        {
+                            "display_name": "Mall ABC, Cebu City, Philippines",
+                            "lat": "10.3117",
+                            "lon": "123.8854"
+                        },
+                        {
+                            "display_name": "Cafe XYZ, Cebu City, Philippines",
+                            "lat": "10.3125",
+                            "lon": "123.8875"
+                        },
+                        {
+                            "display_name": "Restaurant 123, Cebu City, Philippines",
+                            "lat": "10.3152",
+                            "lon": "123.8880"
+                        },
+                        {
+                            "display_name": "Mall DEF, Cebu City, Philippines",
+                            "lat": "10.3200",
+                            "lon": "123.8920"
+                        },
+                        {
+                            "display_name": "Cafe ABC, Cebu City, Philippines",
+                            "lat": "10.3250",
+                            "lon": "123.8950"
+                        },
+                        {
+                            "display_name": "Restaurant XYZ, Cebu City, Philippines",
+                            "lat": "10.3300",
+                            "lon": "123.8990"
+                        },
+                        {
+                            "display_name": "Mall GHI, Cebu City, Philippines",
+                            "lat": "10.3400",
+                            "lon": "123.9100"
+                        }
+                    ],
+                    "errors": null
+                }
+            }
+        }
+        ,
+        {
+            "request": {
+                "method": "GET",
+                "urlPathPattern": "/locations/nearest",
+                "queryParameters": {
+                    "amenity": {
+                        "matches": "mall,cafe,restaurant"
+                    },
+                    "locationCode": {
+                        "matches": "REG7_CEBU_CEBU_CITY"
+                    }
+                },
+                "headers": {
+                    "x-api-key": {
+                        "equalTo": "test-api-key"
+                    },
+                    "authorization": {
+                        "equalTo": "Bearer test-auth-token"
+                    }
+                }
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "jsonBody": {
+                    "data": [
+                        {
+                            "display_name": "Evacuation Center XYZ, Cebu City, Philippines",
+                            "lat": "10.3117",
+                            "lon": "123.8854"
+                        },
+                        {
+                            "display_name": "Municipal Hall ABC, Cebu City, Philippines",
+                            "lat": "10.3000",
+                            "lon": "123.9000"
+                        },
+                        {
+                            "display_name": "Hospital DEF, Cebu City, Philippines",
+                            "lat": "10.3200",
+                            "lon": "123.8800"
+                        }
+                    ],
+                    "errors": null
+                }
+            }
+        }
+    ]
+}
