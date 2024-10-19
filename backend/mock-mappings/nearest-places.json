@@ -76,7 +76,7 @@
                 "urlPathPattern": "/locations/nearest",
                 "queryParameters": {
                     "amenity": {
-                        "matches": "mall,cafe,restaurant"
+                        "matches": "evacuation_center,municipal_hall,hospital"
                     },
                     "locationCode": {
                         "matches": "REG7_CEBU_CEBU_CITY"
