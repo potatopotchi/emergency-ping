@@ -46,6 +46,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
+backend/.env
+web/.env
+
 # yarn v2
 .yarn/cache
 .yarn/unplugged

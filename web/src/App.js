@@ -7,16 +7,18 @@ import {
 } from "react-router-dom";
 import { Navbar } from "@synergy-project-t/ui-components";
 import { AuthWrapper } from "@synergy-project-t/data-wrappers";
-import { LoginPage, Homepage } from "@synergy-project-t/pages";
+import { LoginPage, Homepage, ProfilePage } from "@synergy-project-t/pages";
 
 
 const App = () => {
 
   const MainApp = 
     <AuthWrapper>
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-screen bg-[#fbfbfb]">
         <Navbar />
-        <Outlet />
+        <div className='flex flex-col h-[100%] p-5'>
+          <Outlet />
+        </div>
       </div>
     </AuthWrapper>;
 
@@ -33,6 +35,10 @@ const App = () => {
         {
           path: "login",
           element: <LoginPage />,
+        },
+        {
+          path: "profile",
+          element: <ProfilePage />,
         },
       ],
     },

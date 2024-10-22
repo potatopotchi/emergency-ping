@@ -7,7 +7,7 @@ const getUserAuth = async (baseUrl, token) => {
         id: "userId1",
         firstName: "Employees",
         lastName: "Mustwashhands",
-        roles: ['EMPLOYEE'],
+        roles: ['EMPLOYEE', "ADMIN"],
         // location: "Wadiya",
         // mapX: "632",
         // mapY: "-424"
