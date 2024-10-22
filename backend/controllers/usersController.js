@@ -1,9 +1,9 @@
+const axios = require('axios');
 const mongoose = require('mongoose');
 
 const User = require('../models/userModel');
-
-const axios = require('axios');
 const regionCoordinates = require('../models/region-coordinates.json'); 
+
 
 const FIELDS_TO_POPULATE = ['locationGroup', 'recentStatus'];
 

@@ -6,7 +6,7 @@ const {
   getUsers,
   getEmployeeLocations,
   updateUser,
-  deleteUser,
+  getNearestPlaces
 } = require('../controllers/usersController');
 const { authorizeAnyRoles, requireAuthentication } = require('../middleware/auth');
 
@@ -15,11 +15,12 @@ const router = express.Router();
 
 router.use(requireAuthentication);
 
-router.post('/', authorizeAnyRoles('superuser'), createUser);
-router.get('/', authorizeAnyRoles('superuser', 'admin'), getUsers);
-router.get('/:id', getUser);
-router.put('/:id', updateUser);
-router.delete('/:id', authorizeAnyRoles('superuser'), deleteUser);
+router.post('/', authorizeAnyRoles('SUPERUSER'), createUser);
+router.get('/', authorizeAnyRoles('SUPERUSER', 'ADMIN'), getUsers);
+router.get('/:id', getUser); // permission applied to item level
+router.put('/:id', updateUser); // permission applied to item level
+router.delete('/:id', authorizeAnyRoles('SUPERUSER'), deleteUser);
+router.get('/locations/nearest', getNearestPlaces);
 
 
 module.exports = router;
