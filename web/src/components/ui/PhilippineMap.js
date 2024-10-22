@@ -2,13 +2,15 @@ import { useState } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { NavigationControl, Marker } from 'react-map-gl';
 import { MapGroupIcon } from "@synergy-project-t/ui-components";
+import UserMapIcon from './UserMapIcon';
 
 const PhilippineMap = ({
   longitude = 121.7740,
   latitude = 10.8797,
   pitch = 35,
   markers = [],
-  onMarkerClick = ()=>{}
+  onMarkerClick = ()=>{},
+  user,
 }) => {
   const [zoomLevel, setZoomLevel] = useState(5);
 
@@ -42,10 +44,10 @@ const PhilippineMap = ({
     <div className="w-full h-full relative p-5">
       <Map
         initialViewState={{
-          latitude,
-          longitude,
-          zoom: zoomLevel,
-          pitch
+          latitude: user ? user.address[0] : latitude,
+          longitude: user ? user.address[1] : longitude,
+          zoom: user ? 8 : zoomLevel,
+          pitch,
         }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
@@ -67,6 +69,24 @@ const PhilippineMap = ({
             />
           </Marker>
         ))}
+        {user && user.address && (
+          <Marker
+            latitude={user.address[0]}
+            longitude={user.address[1]}
+            key={user.firstName}
+          >
+            <UserMapIcon
+              color={
+                user.status === "SAFE"
+                  ? "green"
+                  : user.status === "NEED_HELP"
+                  ? "grey"
+                  : "red"
+              }
+              size={zoomLevel > 7 ? 35 : 25}
+            />
+          </Marker>
+        )}
       </Map>
     </div>
   );

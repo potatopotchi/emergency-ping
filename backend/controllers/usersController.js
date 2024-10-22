@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const { hashPassword } = require('../core/utils');
 
+const axios = require('axios');
+const regionCoordinates = require('../models/region-coordinates.json'); 
 
 // const createUser = async (req, res) => {
 
@@ -172,6 +174,47 @@ const deleteUser = async (req, res) => {
     return res.status(200).json(user.toObject());
   }
 
+  const getNearestPlaces = async (req, res) => {
+    try {
+      const { amenity } = req.query;  // Use req.query to get query parameters
+      const employeeLocation = req.locationCode;  // Make sure this is set in your request middleware
+  
+      // If using static mapping, look up the coordinates
+      const coordinates = regionCoordinates[employeeLocation];
+  
+      if (!coordinates) {
+        return res.status(400).json({ success: false, message: 'Invalid location code' });
+      }
+  
+      // Split the comma-separated amenities into an array
+      const amenities = amenity.split(',');
+  
+      let allPlaces = [];
+  
+      // Loop through the amenities and fetch 7 places per amenity
+      for (let a of amenities) {
+        const endpoint = `https://nominatim.openstreetmap.org/search`;
+        const params = {
+          format: 'json',
+          q: a,                // Query each amenity (e.g., 'mall', 'cafe', 'restaurant')
+          lat: coordinates.latitude,
+          lon: coordinates.longitude,
+          radius: 5000,        // 5km radius
+          limit: 7             // Limit to 7 results per amenity
+        };
+  
+        const response = await axios.get(endpoint, { params });
+        allPlaces = [...allPlaces, ...response.data];  // Combine results for all amenities
+      }
+  
+      // Send combined result back
+      res.status(200).json({ success: true, data: allPlaces });
+    } catch (error) {
+      console.error('Error fetching places:', error.message);
+      res.status(500).json({ success: false, message: 'Error fetching nearby places' });
+    }
+  };
+  
 
 module.exports = {
   createUser,
@@ -180,6 +223,7 @@ module.exports = {
   getUsers,
   getEmployeeLocations,
   updateUser,
+  getNearestPlaces
 }
 
 // const jwt = require('jsonwebtoken');
