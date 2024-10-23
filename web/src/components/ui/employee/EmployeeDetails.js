@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomButton from "../CustomButton";
+import CustomModal from "../CustomModal";
 
 const textColor = {
   safe: "text-green-500 text-4xl font-medium",
@@ -7,6 +8,12 @@ const textColor = {
 };
 
 const UserDetails = ({ userDetails }) => {
+  const [modalType, setModalType] = useState();
+
+  //type - NOT_SAFE/SAFE
+  const handleOnClickHelp = (type) => {
+    setModalType((prev) => (!prev ? type : undefined));
+  };
   return (
     <div className="w-3/4 h-[100%] flex flex-col relative border rounded-[0.22rem]">
       <div className="w-[100%] bg-[rgb(244,247,247)] px-7 py-4">
@@ -26,14 +33,37 @@ const UserDetails = ({ userDetails }) => {
             type="secondary"
             size="large"
             className="w-full max-w-md"
+            onClick={() => handleOnClickHelp("SAFE")}
           >
             I AM SAFE
           </CustomButton>
-          <CustomButton type="primary" size="large" className="w-full max-w-md">
-            I NEED HELP
+          <CustomButton
+            type="primary"
+            size="large"
+            className="w-full max-w-md"
+            onClick={() => handleOnClickHelp("NOT_SAFE")}
+          >
+            I AM NOT SAFE
           </CustomButton>
         </div>
       </div>
+      <CustomModal
+        visible={!!modalType}
+        onClose={handleOnClickHelp}
+        title={modalType === "NOT_SAFE" ? "I am Not Safe" : "I am Safe"}
+        footer={[
+          <CustomButton key="cancel" onClick={handleOnClickHelp}>
+            Cancel
+          </CustomButton>,
+          <CustomButton key="submit" type="primary" onClick={handleOnClickHelp}>
+            Send
+          </CustomButton>,
+        ]}
+      >
+        {modalType === "NOT_SAFE"
+          ? "Are you sure you are not safe and could not work?"
+          : "Are you sure you are safe?"}
+      </CustomModal>
     </div>
   );
 };
