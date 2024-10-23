@@ -30,6 +30,7 @@ const CustomButton = ({
   // Define type-specific styles
   const typeStyles = {
     primary: "bg-red-500 text-white hover:bg-red-700 focus:ring-red-500",
+    secondary: "bg-blue-500 text-white hover:bg-blue-700 focus:ring-blue-500",
     default: "bg-gray-100 text-gray-800 hover:bg-gray-200 focus:ring-gray-300",
     danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
   };
