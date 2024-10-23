@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
 const LocationGroup = require('../models/locationGroupModel');
-
 const {
   deriveCreateEndpoint,
   deriveGetManyEndpoint,
