@@ -35,6 +35,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    contactNumber: {
+      type: String,
+    },
     locationGroup: {
       type: Schema.Types.ObjectId,
       ref: "LocationGroup",
