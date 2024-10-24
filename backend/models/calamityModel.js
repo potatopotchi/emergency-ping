@@ -13,6 +13,11 @@ const calamitySchema = new Schema({
     enum: ['LOW', 'NORMAL', 'HIGH'],
     required: true,
   },
+  isActive: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
   locationGroups: [
     {
       type: Schema.Types.ObjectId,
