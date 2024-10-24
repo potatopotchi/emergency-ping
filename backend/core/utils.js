@@ -1,6 +1,15 @@
+const axios = require('axios');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
+const isIterable = (obj) => {
+  if (obj == null) {
+    return false;
+  }
+
+  return typeof obj[Symbol.iterator] === 'function';
+}
 
 const createUserToken = (userData, expiresIn) => {
 
@@ -31,5 +40,6 @@ module.exports = {
   checkPassword,
   createUserToken,
   hashPassword,
+  isIterable,
   verifyUserToken,
 };
