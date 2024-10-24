@@ -21,11 +21,6 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Sample route
-app.get('/api/message', (req, res) => {
-  res.json({ message: 'Hello from the backend!' });
-});
-
 // Register routers
 const apiRouter = express.Router();
 
