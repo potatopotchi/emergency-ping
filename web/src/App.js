@@ -8,6 +8,7 @@ import {
 import { Navbar } from "@synergy-project-t/ui-components";
 import { AuthWrapper } from "@synergy-project-t/data-wrappers";
 import { LoginPage, Homepage, ProfilePage } from "@synergy-project-t/pages";
+import Footer from '@synergy-project-t/ui-components/Footer';
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
           <Outlet />
         </div>
       </div>
+      <Footer />
     </AuthWrapper>;
 
   const router = createBrowserRouter([
