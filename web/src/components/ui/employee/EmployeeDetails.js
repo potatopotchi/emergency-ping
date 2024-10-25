@@ -3,9 +3,16 @@ import CustomButton from "../CustomButton";
 import CustomModal from "../CustomModal";
 
 const textColor = {
-  safe: "text-green-500 text-4xl font-medium",
-  danger: "text-red-600 text-4xl font-medium",
+  SAFE: "text-green-500 text-4xl font-medium",
+  NEED_HELP: "text-red-600 text-4xl font-medium",
+  PENDING: "text-grey-600 text-4xl font-medium",
 };
+
+const statusText = {
+  SAFE: 'Marked as Safe and ready to  work',
+  NEED_HELP: 'Marked as unsafe and could not work',
+  PENDING: 'No Status yet and will mark as unsafe if could not send a status immediately'
+}
 
 const UserDetails = ({ userDetails }) => {
   const [modalType, setModalType] = useState();
@@ -25,9 +32,13 @@ const UserDetails = ({ userDetails }) => {
           alt="User"
           class="w-48 h-48 rounded-full"
         />
-        <div className={textColor[userDetails.status.toLowerCase()]}>
-          {userDetails.status}
+        <div className="flex gap-2 flex-col items-center justify-center">
+          <div className={textColor[userDetails.status]}>
+            {userDetails.status === 'NEED_HELP' ? 'UNSAFE' : 'SAFE'}
+          </div>
+          <div className="text-lg font-bold">{statusText[userDetails.status]}</div>
         </div>
+
         <div className="flex flex-col gap-6 w-full items-center justify-center">
           <CustomButton
             type="secondary"
