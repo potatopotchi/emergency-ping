@@ -3,6 +3,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { NavigationControl, Marker } from 'react-map-gl';
 import { MapGroupIcon } from "@synergy-project-t/ui-components";
 import UserMapIcon from './UserMapIcon';
+import AmenitiesIcon from './AmenitiesIcon';
 
 const PhilippineMap = ({
   longitude = 121.7740,
@@ -46,14 +47,13 @@ const PhilippineMap = ({
         initialViewState={{
           latitude: user ? user.address[0] : latitude,
           longitude: user ? user.address[1] : longitude,
-          zoom: user ? 8 : zoomLevel,
+          zoom: user ? (user.amenities ? 12 : 8) : zoomLevel,
           pitch,
         }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         className="w-full h-full"
         maxBounds={getDynamicBounds(zoomLevel)}
-        maxZoom={10}
         minZoom={3}
         onZoom={handleZoom}
       >
@@ -80,13 +80,27 @@ const PhilippineMap = ({
                 user.status === "SAFE"
                   ? "green"
                   : user.status === "NEED_HELP"
-                  ? "grey"
-                  : "red"
+                  ? "red"
+                  : "grey"
               }
-              size={zoomLevel > 7 ? 35 : 25}
+              size={25}
             />
           </Marker>
         )}
+         {user &&
+          user.amenities &&
+          user.amenities.map((marker) => (
+            <Marker
+              latitude={marker.address[0]}
+              longitude={marker.address[1]}
+              key={marker.name}
+            >
+              <AmenitiesIcon
+                type={marker.type}
+                size={25}
+              />
+            </Marker>
+          ))}
       </Map>
     </div>
   );

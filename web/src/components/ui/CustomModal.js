@@ -21,7 +21,7 @@ const CustomModal = ({ visible, onClose, title, children, footer, closable = tru
 
       {/* Modal Container */}
       <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+        <div className="bg-white rounded-lg shadow-lg min-w-[40%] p-6 relative">
           
           {/* Close Button */}
           {closable && (
