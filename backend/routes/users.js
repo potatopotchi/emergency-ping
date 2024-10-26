@@ -1,11 +1,10 @@
 const express = require('express');
 const {
   createUser,
-  getUsers,
-  getUser,
-  updateUser,
   deleteUser,
-  getNearestPlaces
+  getUser,
+  getUsers,
+  updateUser,
 } = require('../controllers/usersController');
 const { authorizeAnyRoles, requireAuthentication } = require('../middleware/auth');
 
@@ -14,11 +13,11 @@ const router = express.Router();
 
 router.use(requireAuthentication);
 
-router.post('/', authorizeAnyRoles('superuser'), createUser);
-router.get('/', authorizeAnyRoles('superuser', 'admin'), getUsers);
-router.get('/:id', getUser);
-router.put('/:id', updateUser);
-router.delete('/:id', authorizeAnyRoles('superuser'), deleteUser);
-router.get('/locations/nearest', getNearestPlaces);
+router.post('/', authorizeAnyRoles('SUPERUSER'), createUser);
+router.get('/', authorizeAnyRoles('SUPERUSER', 'ADMIN'), getUsers);
+router.get('/:id', getUser); // permission applied to item level
+router.put('/:id', updateUser); // permission applied to item level
+router.delete('/:id', authorizeAnyRoles('SUPERUSER'), deleteUser);
+
 
 module.exports = router;

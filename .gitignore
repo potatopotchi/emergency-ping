@@ -55,3 +55,6 @@ web/.env
 .yarn/build-state.yml
 .yarn/install-state.gz
 /.vs
+
+# Environment variables
+backend/.env
