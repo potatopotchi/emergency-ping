@@ -10,7 +10,7 @@ const calamitySchema = new Schema({
   },
   severity: {
     type: String,
-    enum: ['LOW', 'NORMAL', 'HIGH'],
+    enum: ['LOW', 'MILD', 'HIGH'],
     required: true,
   },
   isActive: {
@@ -20,7 +20,7 @@ const calamitySchema = new Schema({
   },
   locationGroups: [
     {
-      type: Schema.Types.ObjectId,
+      type: Schema.Types.String,
       ref: 'LocationGroup',
     }
   ],
