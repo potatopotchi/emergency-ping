@@ -12,8 +12,6 @@ const {
 } = require('../core/controllers');
 
 
-const FIELDS_TO_POPULATE = ['locationGroups'];
-
 const createRecord = async (req, res) => {
   try {
     const { locationGroups } = req.body;
@@ -39,15 +37,6 @@ const createRecord = async (req, res) => {
 
       user.recentStatus = userStatus._id;
       await user.save();
-
-      await UserStatus.updateMany(
-        {
-          user: user._id,
-          status: 'PENDING',
-          _id: { '$ne': userStatus._id }
-        },
-        { status: 'EXPIRED' },
-      );
     }
 
     return res.status(200).json(record);
@@ -57,10 +46,58 @@ const createRecord = async (req, res) => {
   }
 }
 
-const getRecords = deriveGetManyEndpoint(Calamity, FIELDS_TO_POPULATE);
-const getRecord = deriveGetOneEndpoint(Calamity, FIELDS_TO_POPULATE);
-const updateRecord = deriveUpdateEndpoint(Calamity, FIELDS_TO_POPULATE);
-const deleteRecord = deriveDeleteEndpoint(Calamity, FIELDS_TO_POPULATE);
+const getRecords = deriveGetManyEndpoint(Calamity);
+const getRecord = deriveGetOneEndpoint(Calamity);
+
+const updateRecord = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { fpop, select } = req.query;
+    const { isActive } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({error: 'No such record'});
+    }
+
+    const exist = await Calamity.findById(id).lean();
+    if (!exist) {
+      return res.status(404).json({ error: 'No such record'});
+    }
+
+    const record = await Calamity
+      .findOneAndUpdate(
+        { _id: id },
+        { ...req.body },
+      )
+      .populate(fpop)
+      .select(select)
+      .lean();
+
+    if (!record) {
+      return res.status(400).json({ error: 'Record not updated'});
+    }
+
+    // Expire all user status related to this calamity.
+    if (!isActive) {
+      await UserStatus.updateMany(
+        {
+          calamity: record._id,
+          status: 'PENDING',
+        },
+        {
+          '$set': { status: 'EXPIRED' },
+        },
+      )
+    }
+
+    return res.status(200).json(record);
+  
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+const deleteRecord = deriveDeleteEndpoint(Calamity);
 
 
 module.exports = {
