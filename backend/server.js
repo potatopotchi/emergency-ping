@@ -42,17 +42,17 @@ const populateInitialData = async function () {
 
   for (const item of municipalities) {
     const { region, province, municipality, location } = item;
-    const code = `PH_${region}_${province.replace(' ', '')}_${municipality.replace(' ', '')}`;
+    const code = `PH_${region}_${province.replace(/[\W_]+/g, '')}_${municipality.replace(/[\W_]+/g, '')}`;
     let coordinates = location.coordinates;
 
-    let exist = await LocationGroup.findOne({code}).lean();
+    let exist = await LocationGroup.findOne({ _id: code }).lean();
     if (exist) {
       continue;
     }
 
     results.push(
       LocationGroup.create({
-        code,
+        _id: code,
         country: 'Philippines',
         region,
         province,
@@ -70,7 +70,7 @@ const populateInitialData = async function () {
     locationGroups = await LocationGroup.find();
   }
 
-  // Create superuser.
+  // Create users.
   results = []
 
   const usersInfo = [
