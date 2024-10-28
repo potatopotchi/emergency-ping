@@ -39,7 +39,7 @@ const userSchema = new Schema(
       type: String,
     },
     locationGroup: {
-      type: Schema.Types.ObjectId,
+      type: Schema.Types.String,
       ref: "LocationGroup",
       required: true,
     },
