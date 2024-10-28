@@ -1,5 +1,5 @@
 import React from "react";
-import PhilippineMap from "../PhilippineMap";
+import { PhilippineMap } from "@synergy-project-t/ui-components";
 
 const UserAddress = ({ userDetails }) => {
   return (

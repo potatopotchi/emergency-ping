@@ -1,5 +1,5 @@
 
-const MapGroupIcon = ({ label, viewId='sss', size = 2, status = 'YELLOW', onClick, onHover }) => {
+const MapGroupIcon = ({ label, viewId = '', size = 2, status = 'YELLOW', onClick, onHover }) => {
 
     // Tailwind only accepts full class names; We need to parse the class strings first
     const colorStr = status === 'GREEN' ? 'bg-green-500' : (status === 'YELLOW' ? 'bg-yellow-500' : 'bg-red-500');
