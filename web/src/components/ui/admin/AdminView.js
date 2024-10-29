@@ -224,6 +224,53 @@ const AdminView = () => {
               ]
           }
       ]
+    } : viewId === "NCR_DISTRICT2_PASIG" ? {
+        key: "NCR_DISTRICT2_PASIG",
+        name: "Pasig",
+        status: "GREEN",
+        severity: "ORANGE",
+        members: [
+          {
+            email: "richiet@codev.com",
+            name: "Richie Tamagotchi",
+            imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/282/photo/fb7d6ae2-6406-4851-9dba-b73262fb173f.jpeg",
+            status: "GREEN",
+            location: "123, Saaming Subdivision, Pasig City, Manila",
+            contactNumber: "09123456789",
+          },
+          {
+            email: "julieb@codev.com",
+            name: "Julie Batumbakal",
+            imgUrl: "https://lh3.googleusercontent.com/a/ALm5wu3kg-jPqaYiRCYcWiYnrgWoLkRO4CjhgPZqO4cc=s96-c",
+            status: "GREEN",
+            location: "456, Samay Street, Pasig City, Manila",
+            contactNumber: "09987654321"
+          },
+          {
+            email: "jasminer@codev.com",
+            name: "Jasmine Rice",
+            imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/20/photo/fc067dcf-cf8c-4138-82a5-751315cb27f5.jpeg",
+            status: "GREEN",
+            location: "2319, Aisle 12, SM Pasig Mall, Pasig City, Manila",
+            contactNumber: "(55) 123-4567"
+          },
+          {
+            email: "nggyu@codev.com",
+            name: "Rick Astley",
+            imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/282/photo/fb7d6ae2-6406-4851-9dba-b73262fb173f.jpeg",
+            status: "GREEN",
+            location: "#742, Your Rd., Pasig, Manila",
+            contactNumber: "-",
+          },
+          {
+            email: "nglyd@codev.com",
+            name: "Rick Astley Jr.",
+            imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/282/photo/fb7d6ae2-6406-4851-9dba-b73262fb173f.jpeg",
+            status: "GREEN",
+            location: "#742, Your Rd., Pasig, Manila",
+            contactNumber: "-",
+          },
+        ],
     } : {};
 
     const handleMarkerClick = (e) => {
