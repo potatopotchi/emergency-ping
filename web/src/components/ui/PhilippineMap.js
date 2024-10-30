@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { NavigationControl, Marker } from 'react-map-gl';
+import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
 import { MapGroupIcon, UserMapIcon, AmenitiesIcon } from "@synergy-project-t/ui-components";
 
 const PhilippineMap = ({
@@ -10,9 +12,12 @@ const PhilippineMap = ({
   markers = [],
   onMarkerClick = ()=>{},
   user,
+  amenities = [],
 }) => {
+  const isAmenitiesView = amenities.length > 0;
   const [zoomLevel, setZoomLevel] = useState(5);
-
+  const mapRef = useRef(null);
+  const directionsRef = useRef(null);
   // Define the initial bounds and dynamically adjust them based on zoom level
   const getDynamicBounds = (zoom) => {
     if (zoom >= 8) {
@@ -39,13 +44,45 @@ const PhilippineMap = ({
     const newZoom = e.viewState.zoom;
     setZoomLevel(newZoom); // Update zoom level in state
   };
+
+  const handleLoadMap = () => {
+    if(isAmenitiesView) {
+      directionsRef.current = new MapboxDirections({
+        accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN,
+        unit: 'metric',
+        profile: 'mapbox/driving',
+        controls: {
+          inputs: false,
+          profileSwitcher: false, 
+          instructions: false, 
+        },
+      });
+  
+      mapRef.current.getMap().addControl(directionsRef.current, 'top-left');
+  
+      // set user address as fixed origin
+      if (user && user.address) {
+        directionsRef.current.setOrigin([user.address[1], user.address[0]]);
+      }
+    }
+   
+  }
+
+  const handleAmenitiesClick = (amenity) => {
+    onMarkerClick(amenity)
+    if (directionsRef.current) {
+      directionsRef.current.setDestination([amenity.address[1], amenity.address[0]]);
+    }
+  };
+
   return (
     <div className="w-full h-full relative p-5">
       <Map
+        ref={mapRef}
         initialViewState={{
           latitude: user ? user.address[0] : latitude,
           longitude: user ? user.address[1] : longitude,
-          zoom: user ? (user.amenities ? 12 : 8) : zoomLevel,
+          zoom: user ? (isAmenitiesView ? 15 : 8) : zoomLevel,
           pitch,
         }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
@@ -54,6 +91,7 @@ const PhilippineMap = ({
         maxBounds={getDynamicBounds(zoomLevel)}
         minZoom={3}
         onZoom={handleZoom}
+        onLoad={handleLoadMap}
       >
         <NavigationControl position="top-left" />
         {markers.length > 0 && markers.map((marker) => (
@@ -86,12 +124,13 @@ const PhilippineMap = ({
           </Marker>
         )}
          {user &&
-          user.amenities &&
-          user.amenities.map((marker) => (
+          isAmenitiesView &&
+          amenities.map((marker) => (
             <Marker
               latitude={marker.address[0]}
               longitude={marker.address[1]}
-              key={marker.name}
+              key={marker.address.toString()}
+              onClick={() => handleAmenitiesClick(marker)}
             >
               <AmenitiesIcon
                 type={marker.type}

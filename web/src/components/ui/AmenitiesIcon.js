@@ -1,22 +1,22 @@
 import React from "react";
 import { FaBuildingShield, FaHospital } from "react-icons/fa6";
-import { FiCoffee } from "react-icons/fi";
+import { BiSolidCoffee } from "react-icons/bi";
 
 
-const AmenitiesIcon = ({ size = 20, type = 'EVAC_CENTER' }) => {
+const AmenitiesIcon = ({ size = 20, type = 'EVACUATION_CENTER' }) => {
   const renderIcon = () => {
     switch(type) {
-      case 'EVAC_CENTER': {
-        return <FaBuildingShield size={size} className="text-blue-400"/>
+      case 'EVACUATION_CENTER': {
+        return <FaBuildingShield size={size} className="text-blue-400 hover:cursor-pointer hover:text-blue-500"/>
       }
       case 'HOSPITAL': {
-        return <FaHospital size={size} className="text-blue-400"/>
+        return <FaHospital size={size} className="text-red-400 hover:cursor-pointer hover:text-red-500"/>
       }
       case 'COFFEE_SHOP': {
-        return <FiCoffee size={size} className="text-blue-400"/>
+        return <BiSolidCoffee size={size} className="text-green-400 hover:cursor-pointer hover:text-green-500"/>
       }
       default: {
-        return <FaBuildingShield size={size} className="text-blue-400"/>
+        return <FaBuildingShield size={size} className="text-blue-400 hover:cursor-pointer hover:text-blue-500"/>
       }
     }
   }

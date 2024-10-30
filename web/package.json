@@ -9,6 +9,7 @@
     "src/components/pages"
   ],
   "dependencies": {
+    "@mapbox/mapbox-gl-directions": "^4.3.1",
     "@synergy-project-t/data-wrappers": "^1.0.0",
     "@synergy-project-t/pages": "^1.0.0",
     "@synergy-project-t/ui-components": "^1.0.0",

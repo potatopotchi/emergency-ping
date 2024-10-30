@@ -4,9 +4,9 @@ import { GrDocument } from "react-icons/gr";
 import CustomModal from "../CustomModal";
 import PhilippineMap from "../PhilippineMap";
 
-const UserAddress = ({ userDetails }) => {
+const UserAddress = ({ userDetails, amenities }) => {
   const [openMap, setOpenMap] = useState();
-
+  const [selectedAmenity, setSelectedAmenity] = useState();
   return (
     <div className="w-full h-[100%] flex flex-col relative border rounded-[0.22rem]">
       <div className="w-[100%] bg-[rgb(244,247,247)] px-7 py-4">
@@ -36,9 +36,22 @@ const UserAddress = ({ userDetails }) => {
         onClose={() => setOpenMap(false)}
         title={"Nearest Amenities"}
       >
-       <div className="p-1 h-[60vh] w-[60vw]">
-            <PhilippineMap zoomLevel={5} user={userDetails} />
+        <div className="p-4 h-[70vh] w-[60vw]">
+          <PhilippineMap
+            zoomLevel={5}
+            user={userDetails}
+            amenities={amenities}
+            onMarkerClick={(amenity) => setSelectedAmenity(amenity)}
+          />
+          <div className="flex flex-col gap-1 pb-6">
+            <div>
+              {`Name: ${selectedAmenity ? selectedAmenity.name : ""}`}
+            </div>
+            <div>
+              {`Type: ${selectedAmenity ? selectedAmenity.type.split('_').join(' ') : ""}`}
+            </div>
           </div>
+        </div>
       </CustomModal>
     </div>
   );
