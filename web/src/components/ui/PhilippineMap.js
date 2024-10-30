@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { NavigationControl, Marker } from 'react-map-gl';
-import { MapGroupIcon } from "@synergy-project-t/ui-components";
-import UserMapIcon from './UserMapIcon';
-import AmenitiesIcon from './AmenitiesIcon';
+import { MapGroupIcon, UserMapIcon, AmenitiesIcon } from "@synergy-project-t/ui-components";
 
 const PhilippineMap = ({
   longitude = 121.7740,

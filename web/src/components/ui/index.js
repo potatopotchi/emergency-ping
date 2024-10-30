@@ -4,3 +4,5 @@ export { default as UserIcon } from "./UserIcon";
 export { default as MapGroupIcon } from './MapGroupIcon';
 export { default as MapGroupSection } from './MapGroupSection';
 export { default as AdminView } from './AdminView';
+export { default as UserMapIcon } from "./UserMapIcon";
+export { default as AmenitiesIcon } from "./AmenitiesIcon";
