@@ -14,25 +14,25 @@ const guideSection = (
     </div>
 );
 
-const AdminGroupSection = ({ groupDetails = {}, setViewId = ()=> {} }) => {
+const AdminGroupSection = ({ groupDetails = {} }) => {
     const [renderedComp, setRenderedComp] = useState(guideSection);
 
-    const { key: viewId } = groupDetails;
+    const { key } = groupDetails;
 
     useEffect(() => {
-        if (viewId) {
-            setRenderedComp(<OverviewSection groupDetails={groupDetails} setViewId={setViewId}/>);
+        if (key) {
+            setRenderedComp(<OverviewSection groupDetails={groupDetails}/>);
         }
         else {
             setRenderedComp(guideSection);
         }
     }, [
-        viewId
+        key
     ]);
 
     return (
-        <div className="flex flex-col w-[600px] border rounded-[0.22rem] min-h-[40%]">
-            <div className="w-[100%] bg-[rgb(244,247,247)] px-7 py-4">DASHBOARD</div>
+        <div className="flex flex-col w-[100%] border rounded-[0.22rem] min-h-[40%]">
+            <div className="w-[100%] bg-[rgb(244,247,247)] px-7 py-4 font-medium">DASHBOARD</div>
             <div class="
                 flex
                 flex-1

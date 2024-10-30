@@ -26,6 +26,30 @@ const useUserAuthStore = create((set) => ({
     }),
 }));
 
+const useMapViewStore = create((set) => ({
+    mapView: {
+        key: "GUIDE",
+        lat: null,
+        long: null,
+        zoom: null,
+    },
+    setMapView: (mapView) => set((state) => ({ 
+        mapView: {
+            ...state.mapView,
+            ...mapView
+        }
+    })),
+    removeMapView: () => set({ 
+        mapView: {
+            key: "GUIDE",
+            lat: null,
+            long: null,
+            zoom: null,
+        }
+    }),
+}));
+
 export {
-    useUserAuthStore
+    useUserAuthStore,
+    useMapViewStore
 }

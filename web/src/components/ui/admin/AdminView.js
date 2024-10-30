@@ -1,5 +1,6 @@
-import { PhilippineMap, AdminGroupSection } from '@synergy-project-t/ui-components';
-import { useState } from 'react';
+import { PhilippineMap, AdminGroupSection, AdminNewsSection, AdminNotificationsSection } from '@synergy-project-t/ui-components';
+import { useState, useEffect, useRef } from 'react';
+import { useMapViewStore } from '@synergy-project-t/utils/stores';
 
 const markers = [
     {
@@ -58,238 +59,267 @@ const markers = [
       status: 'NEED_HELP',
       address: [13.781983178861278, 121.01534704946845],
     },
-  ]
+  ];
+
+const regionDetails = {
+    key: "REGION_NCR",
+    name: "Metro Manila (NCR)",
+    status: "RED",
+    severity: "ORANGE",
+    members: [
+        {
+            key: "PROVINCE_DISTRICT1",
+            name: "Capital District",
+            status: "GREEN",
+            severity: "GREEN",
+            members: [
+                {
+                    key: "NCR_DISTRICT1_MANILA",
+                    name: "Manila",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 12
+                }
+            ]
+        },
+        {
+            key: "PROVINCE_DISTRICT2",
+            name: "Eastern Manila District",
+            status: "GREEN",
+            severity: "ORANGE",
+            members: [
+                {
+                    key: "NCR_DISTRICT2_MANDALUYONG",
+                    name: "Mandaluyong",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 1
+                },
+                {
+                    key: "NCR_DISTRICT2_MARIKINA",
+                    name: "Marikina",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 0
+                },
+                {
+                    key: "NCR_DISTRICT2_PASIG",
+                    name: "Pasig",
+                    status: "GREEN",
+                    severity: "ORANGE",
+                    population: 5,
+                    address: [14.5736, 121.0785]
+                },
+                {
+                    key: "NCR_DISTRICT2_QUEZONCITY",
+                    name: "Quezon City",
+                    status: "GREEN",
+                    severity: "ORANGE",
+                    population: 0
+                },
+                {
+                    key: "NCR_DISTRICT2_SANJUAN",
+                    name: "San Juan",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 2
+                }
+            ]
+        },
+        {
+            key: "PROVINCE_DISTRICT3",
+            name: "Northern Manila District (Camanava)",
+            status: "RED",
+            severity: "ORANGE",
+            members: [
+                {
+                    key: "NCR_DISTRICT3_CALOOCAN",
+                    name: "Caloocan",
+                    status: "RED",
+                    severity: "ORANGE",
+                    population: 2
+                },
+                {
+                    key: "NCR_DISTRICT3_MALABON",
+                    name: "Malabon",
+                    status: "ORANGE",
+                    severity: "ORANGE",
+                    population: 1
+                },
+                {
+                    key: "NCR_DISTRICT3_NAVOTAS",
+                    name: "Navotas",
+                    status: "GREEN",
+                    severity: "ORANGE",
+                    population: 0
+                },
+                {
+                    key: "NCR_DISTRICT3_VALENZUELA",
+                    name: "Valenzuela",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 3
+                }
+            ]
+        },
+        {
+            key: "PROVINCE_DISTRICT4",
+            name: "Southern Manila District",
+            status: "GREEN",
+            severity: "GREEN",
+            members: [
+                {
+                    key: "NCR_DISTRICT4_LASPINAS",
+                    name: "Las Piñas",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 2
+                },
+                {
+                    key: "NCR_DISTRICT4_MAKATI",
+                    name: "Makati",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 8
+                },
+                {
+                    key: "NCR_DISTRICT4_MUNTINLUPA",
+                    name: "Muntinlupa",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 0
+                },
+                {
+                    key: "NCR_DISTRICT4_PARANAQUE",
+                    name: "Parañaque",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 5
+                },
+                {
+                    key: "NCR_DISTRICT4_PASAY",
+                    name: "Pasay",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 1
+                },
+                {
+                    key: "NCR_DISTRICT4_PATEROS",
+                    name: "Pateros",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 0
+                },
+                {
+                    key: "NCR_DISTRICT4_TAGUIG",
+                    name: "Taguig",
+                    status: "GREEN",
+                    severity: "GREEN",
+                    population: 2
+                },
+            ]
+        }
+    ]
+};
+
+const residentsDetails = {
+    key: "NCR_DISTRICT2_PASIG",
+    name: "Pasig",
+    status: "GREEN",
+    severity: "ORANGE",
+    members: [
+    {
+        email: "richiet@codev.com",
+        name: "Richie Tamagotchi",
+        imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/282/photo/fb7d6ae2-6406-4851-9dba-b73262fb173f.jpeg",
+        status: "GREEN",
+        location: "123, Saaming Subdivision, Pasig City, Manila",
+        contactNumber: "09123456789",
+    },
+    {
+        email: "julieb@codev.com",
+        name: "Julie Batumbakal",
+        imgUrl: "https://lh3.googleusercontent.com/a/ALm5wu3kg-jPqaYiRCYcWiYnrgWoLkRO4CjhgPZqO4cc=s96-c",
+        status: "GREEN",
+        location: "456, Samay Street, Pasig City, Manila",
+        contactNumber: "09987654321"
+    },
+    {
+        email: "jasminer@codev.com",
+        name: "Jasmine Rice",
+        imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/20/photo/fc067dcf-cf8c-4138-82a5-751315cb27f5.jpeg",
+        status: "GREEN",
+        location: "2319, Aisle 12, SM Pasig Mall, Pasig City, Manila",
+        contactNumber: "(55) 123-4567"
+    },
+    {
+        email: "nggyu@codev.com",
+        name: "Rick Astley",
+        imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/282/photo/fb7d6ae2-6406-4851-9dba-b73262fb173f.jpeg",
+        status: "GREEN",
+        location: "#742, Your Rd., Pasig, Manila",
+        contactNumber: "-",
+    },
+    {
+        email: "nglyd@codev.com",
+        name: "Rick Astley Jr.",
+        imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/282/photo/fb7d6ae2-6406-4851-9dba-b73262fb173f.jpeg",
+        status: "GREEN",
+        location: "#742, Your Rd., Pasig, Manila",
+        contactNumber: "-",
+    },
+    ],
+};
 
 const AdminView = () => {
 
-    const [viewId, setViewId] = useState("GUIDE");
+    const mapRef = useRef(null);
 
-    //TODO Implement SWR call here*
+    const { mapView: view, setMapView } = useMapViewStore((state) => state);
 
-    const groupDetails = viewId === "REGION_NCR" ? {
-      key: "REGION_NCR",
-      name: "Metro Manila (NCR)",
-      status: "RED",
-      severity: "ORANGE",
-      members: [
-          {
-              key: "PROVINCE_DISTRICT1",
-              name: "Capital District",
-              status: "GREEN",
-              severity: "GREEN",
-              members: [
-                  {
-                      key: "NCR_DISTRICT1_MANILA",
-                      name: "Manila",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 12
-                  }
-              ]
-          },
-          {
-              key: "PROVINCE_DISTRICT2",
-              name: "Eastern Manila District",
-              status: "GREEN",
-              severity: "ORANGE",
-              members: [
-                  {
-                      key: "NCR_DISTRICT2_MANDALUYONG",
-                      name: "Mandaluyong",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 1
-                  },
-                  {
-                      key: "NCR_DISTRICT2_MARIKINA",
-                      name: "Marikina",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 0
-                  },
-                  {
-                      key: "NCR_DISTRICT2_PASIG",
-                      name: "Pasig",
-                      status: "GREEN",
-                      severity: "ORANGE",
-                      population: 5
-                  },
-                  {
-                      key: "NCR_DISTRICT2_QUEZONCITY",
-                      name: "Quezon City",
-                      status: "GREEN",
-                      severity: "ORANGE",
-                      population: 0
-                  },
-                  {
-                      key: "NCR_DISTRICT2_SANJUAN",
-                      name: "San Juan",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 2
-                  }
-              ]
-          },
-          {
-              key: "PROVINCE_DISTRICT3",
-              name: "Northern Manila District (Camanava)",
-              status: "RED",
-              severity: "ORANGE",
-              members: [
-                  {
-                      key: "NCR_DISTRICT3_CALOOCAN",
-                      name: "Caloocan",
-                      status: "RED",
-                      severity: "ORANGE",
-                      population: 2
-                  },
-                  {
-                      key: "NCR_DISTRICT3_MALABON",
-                      name: "Malabon",
-                      status: "ORANGE",
-                      severity: "ORANGE",
-                      population: 1
-                  },
-                  {
-                      key: "NCR_DISTRICT3_NAVOTAS",
-                      name: "Navotas",
-                      status: "GREEN",
-                      severity: "ORANGE",
-                      population: 0
-                  },
-                  {
-                      key: "NCR_DISTRICT3_VALENZUELA",
-                      name: "Valenzuela",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 3
-                  }
-              ]
-          },
-          {
-              key: "PROVINCE_DISTRICT4",
-              name: "Southern Manila District",
-              status: "GREEN",
-              severity: "GREEN",
-              members: [
-                  {
-                      key: "NCR_DISTRICT4_LASPINAS",
-                      name: "Las Piñas",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 2
-                  },
-                  {
-                      key: "NCR_DISTRICT4_MAKATI",
-                      name: "Makati",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 8
-                  },
-                  {
-                      key: "NCR_DISTRICT4_MUNTINLUPA",
-                      name: "Muntinlupa",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 0
-                  },
-                  {
-                      key: "NCR_DISTRICT4_PARANAQUE",
-                      name: "Parañaque",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 5
-                  },
-                  {
-                      key: "NCR_DISTRICT4_PASAY",
-                      name: "Pasay",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 1
-                  },
-                  {
-                      key: "NCR_DISTRICT4_PATEROS",
-                      name: "Pateros",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 0
-                  },
-                  {
-                      key: "NCR_DISTRICT4_TAGUIG",
-                      name: "Taguig",
-                      status: "GREEN",
-                      severity: "GREEN",
-                      population: 2
-                  },
-              ]
-          }
-      ]
-    } : viewId === "NCR_DISTRICT2_PASIG" ? {
-        key: "NCR_DISTRICT2_PASIG",
-        name: "Pasig",
-        status: "GREEN",
-        severity: "ORANGE",
-        members: [
-          {
-            email: "richiet@codev.com",
-            name: "Richie Tamagotchi",
-            imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/282/photo/fb7d6ae2-6406-4851-9dba-b73262fb173f.jpeg",
-            status: "GREEN",
-            location: "123, Saaming Subdivision, Pasig City, Manila",
-            contactNumber: "09123456789",
-          },
-          {
-            email: "julieb@codev.com",
-            name: "Julie Batumbakal",
-            imgUrl: "https://lh3.googleusercontent.com/a/ALm5wu3kg-jPqaYiRCYcWiYnrgWoLkRO4CjhgPZqO4cc=s96-c",
-            status: "GREEN",
-            location: "456, Samay Street, Pasig City, Manila",
-            contactNumber: "09987654321"
-          },
-          {
-            email: "jasminer@codev.com",
-            name: "Jasmine Rice",
-            imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/20/photo/fc067dcf-cf8c-4138-82a5-751315cb27f5.jpeg",
-            status: "GREEN",
-            location: "2319, Aisle 12, SM Pasig Mall, Pasig City, Manila",
-            contactNumber: "(55) 123-4567"
-          },
-          {
-            email: "nggyu@codev.com",
-            name: "Rick Astley",
-            imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/282/photo/fb7d6ae2-6406-4851-9dba-b73262fb173f.jpeg",
-            status: "GREEN",
-            location: "#742, Your Rd., Pasig, Manila",
-            contactNumber: "-",
-          },
-          {
-            email: "nglyd@codev.com",
-            name: "Rick Astley Jr.",
-            imgUrl: "https://internalcodev.blob.core.windows.net/internal-public/employees/282/photo/fb7d6ae2-6406-4851-9dba-b73262fb173f.jpeg",
-            status: "GREEN",
-            location: "#742, Your Rd., Pasig, Manila",
-            contactNumber: "-",
-          },
-        ],
-    } : {};
+    useEffect(() => {
+        const { key, long, lat, zoom } = view;
+        if (key !== "GUIDE") {
+            mapRef.current?.flyTo({ 
+                center: [long, lat],
+                zoom: zoom,
+                duration: 4000,
+                essential: true 
+            });
+        }
+    },[
+        JSON.stringify(view)
+    ]);
 
-    const handleMarkerClick = (e) => {
+    //TODO Replace with SWR call to the backend
+    const groupDetails = view.key === "REGION_NCR" ? regionDetails : view.key === "NCR_DISTRICT2_PASIG" ? residentsDetails : {};
+
+    const handleMarkerClick = (lat, long) => (e) => {
         const clickedViewId = e.target.getAttribute('view-id');
-        if (clickedViewId !== viewId) {
-            setViewId(clickedViewId);
+        if (clickedViewId !== view.key) {
+            setMapView({
+                key: clickedViewId,
+                lat,
+                long,
+                zoom: 9
+            });
         }
     };
 
     return (
-        <div class="flex h-full gap-2">
+        <div class="flex h-full gap-4">
             <div className="w-[600px] h-[100%] flex flex-col relative border rounded-[0.22rem]">
-                <div className="w-[100%] bg-[rgb(244,247,247)] px-7 py-4">MAP</div>
+                <div className="w-[100%] bg-[rgb(244,247,247)] px-7 py-4 font-medium">MAP</div>
                 <div className="p-1 w-[100%] flex-1">
-                    <PhilippineMap zoomLevel={5} markers={markers} onMarkerClick={handleMarkerClick}/>
+                    <PhilippineMap mapRef={mapRef} zoomLevel={5} markers={markers} onMarkerClick={handleMarkerClick}/>
                 </div>
             </div>
             <div className="w-[600px] h-[100%] flex flex-col relative">
-              <AdminGroupSection groupDetails={groupDetails} setViewId={setViewId}/>
+              <AdminGroupSection groupDetails={groupDetails}/>
+            </div>
+            <div className="flex-1 h-[100%] flex flex-col gap-4 relative">
+                <AdminNotificationsSection/>
+                <AdminNewsSection/>
             </div>
         </div>
     );

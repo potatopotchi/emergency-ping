@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { NavigationControl, Marker } from 'react-map-gl';
 import { MapGroupIcon } from "@synergy-project-t/ui-components";
 import UserMapIcon from './UserMapIcon';
 
 const PhilippineMap = ({
+  mapRef,
   longitude = 121.7740,
   latitude = 10.8797,
   pitch = 35,
@@ -13,6 +14,7 @@ const PhilippineMap = ({
   user,
 }) => {
   const [zoomLevel, setZoomLevel] = useState(5);
+  const ownMapRef = useRef(null);
 
   // Define the initial bounds and dynamically adjust them based on zoom level
   const getDynamicBounds = (zoom) => {
@@ -43,6 +45,7 @@ const PhilippineMap = ({
   return (
     <div className="w-full h-full relative p-5">
       <Map
+        ref={mapRef || ownMapRef}
         initialViewState={{
           latitude: user ? user.address[0] : latitude,
           longitude: user ? user.address[1] : longitude,
@@ -53,7 +56,7 @@ const PhilippineMap = ({
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         className="w-full h-full"
         maxBounds={getDynamicBounds(zoomLevel)}
-        maxZoom={10}
+        maxZoom={13}
         minZoom={3}
         onZoom={handleZoom}
       >
@@ -65,7 +68,7 @@ const PhilippineMap = ({
               viewId={marker.viewId}
               status={marker.status === 'SAFE' ? 'GREEN' : (marker.status === 'NEED_HELP' ? 'YELLOW' : 'RED')}
               size={zoomLevel > 7 ? 3 : 2} //in 'em'
-              onClick={onMarkerClick}
+              onClick={onMarkerClick(marker.address[0], marker.address[1])}
             />
           </Marker>
         ))}

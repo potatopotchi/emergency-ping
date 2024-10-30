@@ -1,4 +1,5 @@
 import { usePrevious } from "@synergy-project-t/utils";
+import { useMapViewStore } from "@synergy-project-t/utils/stores";
 
 const StatusIcon = ({status}) => <div class={`
     h-[0.75em] 
@@ -8,17 +9,7 @@ const StatusIcon = ({status}) => <div class={`
     rounded-2xl
 `}/>
 
-const OverviewSection = ({groupDetails = {}, setViewId = ()=>{}}) => {
-
-    const { key: viewId } = groupDetails;
-
-    const prevViewId = usePrevious(viewId);
-
-    const setPrevViewId = () => {
-        if (prevViewId && viewId !== prevViewId) {
-            setViewId(prevViewId);
-        }
-    };
+const OverviewSection = ({groupDetails = {}}) => {
 
     const {
         key = '',
@@ -28,10 +19,23 @@ const OverviewSection = ({groupDetails = {}, setViewId = ()=>{}}) => {
         members = []
     } = groupDetails;
 
+    const { mapView, setMapView } = useMapViewStore((state) => state);
+
+    const prevView = usePrevious(mapView);
+
+    const setPrevView = () => {
+        if (prevView.key && (mapView.key !== prevView.key)) {
+            setMapView({
+                ...prevView
+            });
+        }
+    };
+
     return key.startsWith('REGION_') ? (
         <div class={members.length > 0 ? "pb-6" : ""}>
             <div class="
-                py-6
+                pt-6
+                pb-2
                 px-8
             ">
                 <div class="
@@ -49,6 +53,9 @@ const OverviewSection = ({groupDetails = {}, setViewId = ()=>{}}) => {
                         mx-1
                         ${severity === "GREEN" ? "text-green-400" : (severity === "RED" ? "text-red-400" : "text-orange-400")} 
                     `}>{severity}</div> | Areas: {members.length || 0}
+                </div>
+                <div class="flex mt-3 font-semibold text-gray-400 italic w-[100%] justify-center">
+                    {"Click on an item below to view more details"}
                 </div>
             </div>
             {
@@ -114,7 +121,19 @@ const OverviewSection = ({groupDetails = {}, setViewId = ()=>{}}) => {
                                         `}>{e.severity}</div> | Employees: {e.population || '0'}
                                     </div>
                                 </div>
-                                <div class="ml-auto hover:underline text-[#ea3b2d] font-semibold" onClick={()=>{setViewId(e.key || '')}}>VIEW</div>
+                                <div 
+                                    class="ml-auto hover:underline text-[#ea3b2d] font-semibold" 
+                                    onClick={()=>{
+                                        setMapView({
+                                            key: e.key || '',
+                                            lat: e.address[0],
+                                            long: e.address[1],
+                                            zoom: 12
+                                        });
+                                    }}
+                                >
+                                    {"VIEW"}
+                                </div>
                             </div>
                         ))
                         }
@@ -132,36 +151,48 @@ const OverviewSection = ({groupDetails = {}, setViewId = ()=>{}}) => {
             ${members.length > 0 ? "pb-6" : ""}
             `}>
             <div class="
-                py-6
+                pt-6
+                pb-2
                 px-8
-                flex
             ">
-                <div>
-                    <div class="
-                        flex
-                        font-semibold
-                        text-lg
-                        items-center
-                    ">
-                        <StatusIcon status={status}/>
-                        {name}
+                <div class="flex">
+                    <div>
+                        <div class="
+                            flex
+                            font-semibold
+                            text-lg
+                            items-center
+                        ">
+                            <StatusIcon status={status}/>
+                            {name}
+                        </div>
+                        <div class="flex">
+                            Alert Level: <div class={`
+                                font-semibold 
+                                mx-1
+                                ${severity === "GREEN" ? "text-green-400" : (severity === "RED" ? "text-red-400" : "text-orange-400")} 
+                            `}>{severity}</div> | Employees: {members.length || 0}
+                        </div>
                     </div>
-                    <div class="flex">
-                        Alert Level: <div class={`
-                            font-semibold 
-                            mx-1
-                            ${severity === "GREEN" ? "text-green-400" : (severity === "RED" ? "text-red-400" : "text-orange-400")} 
-                        `}>{severity}</div> | Employees: {members.length || 0}
+                    <div class="flex flex-1 justify-end items-center">
+                        <div class="hover:underline hover:cursor-pointer text-[#ea3b2d] font-semibold" onClick={()=>{setPrevView()}}>
+                            {"< Back"}
+                        </div>
                     </div>
                 </div>
-                <div class="flex flex-1 justify-end items-center">
-                    <div class="hover:underline hover:cursor-pointer text-[#ea3b2d] font-semibold" onClick={()=>{setPrevViewId()}}>
-                        {"< Back"}
-                    </div>
+                <div class="flex mt-3 font-semibold text-gray-400 italic w-[100%] justify-center">
+                    {"Click on an item below to view available actions"}
                 </div>
             </div>
-            <div class={"overflow-y-auto"}>
-                <div class={"flex flex-col space-y-2 p-2 list-none bg-gray-200"}>
+            <div class="overflow-y-auto border-y">
+                <div class="
+                    flex 
+                    flex-col 
+                    space-y-2 
+                    p-2 
+                    list-none 
+                    bg-gray-200
+                ">
                 {
                 members.map(e => (
                     <details class="
