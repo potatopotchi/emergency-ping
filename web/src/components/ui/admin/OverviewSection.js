@@ -124,12 +124,16 @@ const OverviewSection = ({groupDetails = {}}) => {
                                 <div 
                                     class="ml-auto hover:underline text-[#ea3b2d] font-semibold" 
                                     onClick={()=>{
-                                        setMapView({
-                                            key: e.key || '',
-                                            lat: e.address[0],
-                                            long: e.address[1],
-                                            zoom: 12
-                                        });
+                                        try {
+                                            setMapView({
+                                                key: e.key || '',
+                                                lat: e.address[0],
+                                                long: e.address[1],
+                                                zoom: 13
+                                            });
+                                        } catch (err) {
+                                            console.log("Invalid address")
+                                        }
                                     }}
                                 >
                                     {"VIEW"}

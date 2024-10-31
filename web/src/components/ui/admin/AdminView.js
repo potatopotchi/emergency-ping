@@ -1,63 +1,134 @@
 import { PhilippineMap, AdminGroupSection, AdminNewsSection, AdminNotificationsSection } from '@synergy-project-t/ui-components';
 import { useState, useEffect, useRef } from 'react';
 import { useMapViewStore } from '@synergy-project-t/utils/stores';
+import { RiRefreshLine } from 'react-icons/ri';
 
 const markers = [
     {
-      label: '1',
-      viewId: 'GROUP1',
-      name: 'User 1', // user name
-      //icon: "https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109", // image icon
-      status: 'NEED_HELP', // SAFE, NEED_HELP, NO_RESPONSE
-      address: [10.534851, 122.875836], // user address
-    },
-    {
-      label: '2',
-      viewId: 'GROUP2',
-      name: 'User 2', 
-      icon: 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109',
-      status: 'SAFE', 
-      address: [7.938080467480591, 122.7804583101427],
-    },
-    {
-      label: '3',
-      viewId: 'GROUP3',
-      name: 'User 3',
-      icon: 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109',
-      status: 'NO_RESPONSE',
-      address: [11.9960484769978, 121.91716483177602],
-    },
-    {
-      label: '4',
-      viewId: 'GROUP4',
-      name: 'User 4',
-      icon: 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109',
-      status: 'SAFE',
-      address: [18.373760, 121.105051],
-    },
-    {
-      label: '5',
-      viewId: 'GROUP5',
-      name: 'User 5',
-      icon: 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109',
-      status: 'NO_RESPONSE',
-      address: [9.282173091121518, 125.84579344397739],
-    },
-    {
-      label: '6',
-      viewId: 'GROUP6',
-      name: 'User 6',
-      icon: 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109',
-      status: 'SAFE',
-      address: [13.751736402758034, 123.39197473649288],
-    },
-    {
-      label: '7',
+      label: 'A',
+      name: "Metro Manila (NCR)",
       viewId: 'REGION_NCR',
-      name: 'User 7',
-      icon: 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109',
       status: 'NEED_HELP',
-      address: [13.781983178861278, 121.01534704946845],
+      address: [14.6091, 121.0223],
+    },
+    {
+      label: 'B',
+      name: "Cordillera Administrative Region",
+      viewId: 'REGION_CAR',
+      status: 'SAFE',
+      address: [17.3513, 121.1719],
+    },
+    {
+      label: 'C',
+      name: "Ilocos",
+      viewId: 'REGION_1',
+      status: 'SAFE',
+      address: [16.0832, 120.6200],
+    },
+    {
+      label: 'D',
+      name: "Cagayan Valley",
+      viewId: 'REGION_2',
+      status: 'SAFE',
+      address: [16.9754, 121.8107],
+    },
+    {
+      label: 'E',
+      name: "Central Luzon",
+      viewId: 'REGION_3',
+      status: 'SAFE',
+      address: [15.4828, 120.7120],
+    },
+    {
+      label: 'F',
+      name: "Calabarzon",
+      viewId: 'REGION_4A',
+      status: 'SAFE',
+      address: [14.1008, 121.0794],
+    },
+    {
+      label: 'G',
+      name: "Southwestern Tagalog (Mimaropa)",
+      viewId: 'REGION_MIMAROPA',
+      status: 'SAFE',
+      address: [9.8432, 118.7365],
+    },
+    {
+      label: 'H',
+      name: "Bicol",
+      viewId: 'REGION_5',
+      status: 'SAFE',
+      address: [13.4210, 123.4137],
+    },
+    {
+      label: 'I',
+      name: "Western Visayas",
+      viewId: 'REGION_6',
+      status: 'SAFE',
+      address: [11.0050, 122.5373],
+    },
+    {
+      label: 'J',
+      name: "Negros Island",
+      viewId: 'REGION_NIR',
+      status: 'SAFE',
+      address: [9.7151, 122.8987],
+    },
+    {
+      label: 'K',
+      name: "Central Visayas",
+      viewId: 'REGION_7',
+      status: 'SAFE',
+      address: [9.8169, 124.0641],
+    },
+    {
+      label: 'L',
+      name: "Eastern Visayas",
+      viewId: 'REGION_8',
+      status: 'SAFE',
+      address: [12.2446, 125.0388],
+    },
+    {
+      label: 'M',
+      name: "Zamboanga Peninsula",
+      viewId: 'REGION_9',
+      status: 'SAFE',
+      address: [6.5750, 122.0360],
+    },
+    {
+      label: 'N',
+      name: "Northern Mindanao",
+      viewId: 'REGION_10',
+      status: 'SAFE',
+      address: [8.0202, 124.6857],
+    },
+    {
+      label: 'O',
+      name: "Davao",
+      viewId: 'REGION_11',
+      status: 'SAFE',
+      address: [7.3042, 126.0893],
+    },
+    {
+      label: 'P',
+      name: "Soccsksargen",
+      viewId: 'REGION_12',
+      status: 'SAFE',
+      address: [6.2707, 124.6857],
+    },
+    {
+      label: 'Q',
+      name: "Caraga",
+      viewId: 'REGION_13',
+      status: 'SAFE',
+      address: [8.8015, 125.7407],
+    },
+    {
+      label: 'R',
+      name: "Bangsamoro (BARMM)",
+      viewId: 'REGION_3',
+      status: 'SAFE',
+      address: [6.9568, 124.2422],
     },
   ];
 
@@ -275,10 +346,10 @@ const AdminView = () => {
 
     const mapRef = useRef(null);
 
-    const { mapView: view, setMapView } = useMapViewStore((state) => state);
+    const { mapView = {}, setMapView, removeMapView } = useMapViewStore((state) => state);
+    const { key, long, lat, zoom } = mapView;
 
-    useEffect(() => {
-        const { key, long, lat, zoom } = view;
+    useEffect(() => {     
         if (key !== "GUIDE") {
             mapRef.current?.flyTo({ 
                 center: [long, lat],
@@ -287,37 +358,52 @@ const AdminView = () => {
                 essential: true 
             });
         }
+        else {
+            mapRef.current?.flyTo({ 
+                center: [121.7740, 10.8797],
+                zoom: 5,
+                duration: 2000,
+                essential: true 
+            });
+        }
     },[
-        JSON.stringify(view)
+        JSON.stringify(mapView)
     ]);
 
     //TODO Replace with SWR call to the backend
-    const groupDetails = view.key === "REGION_NCR" ? regionDetails : view.key === "NCR_DISTRICT2_PASIG" ? residentsDetails : {};
+    const groupDetails = key === "REGION_NCR" ? regionDetails : key === "NCR_DISTRICT2_PASIG" ? residentsDetails : {};
 
     const handleMarkerClick = (lat, long) => (e) => {
         const clickedViewId = e.target.getAttribute('view-id');
-        if (clickedViewId !== view.key) {
+        if (clickedViewId !== key) {
             setMapView({
                 key: clickedViewId,
                 lat,
                 long,
-                zoom: 9
+                zoom: 10
             });
         }
     };
 
+    const handleReloadView = (e) => {
+        removeMapView();
+    }
+
     return (
         <div class="flex h-full gap-4">
-            <div className="w-[600px] h-[100%] flex flex-col relative border rounded-[0.22rem]">
-                <div className="w-[100%] bg-[rgb(244,247,247)] px-7 py-4 font-medium">MAP</div>
-                <div className="p-1 w-[100%] flex-1">
-                    <PhilippineMap mapRef={mapRef} zoomLevel={5} markers={markers} onMarkerClick={handleMarkerClick}/>
+            <div class="w-[600px] h-[100%] flex flex-col relative border rounded-[0.22rem]">
+                <div class="flex w-[100%] bg-[rgb(244,247,247)] px-7 py-4 font-medium">
+                    <div>{"MAP"}</div>
+                    <div class="ml-auto hover:cursor-pointer" onClick={handleReloadView}><RiRefreshLine size="1.5em"/></div>
+                </div>
+                <div class="p-1 w-[100%] flex-1">
+                    <PhilippineMap mapRef={mapRef} zoomLevel={5} markers={key === "GUIDE" && markers} onMarkerClick={handleMarkerClick}/>
                 </div>
             </div>
-            <div className="w-[600px] h-[100%] flex flex-col relative">
+            <div class="w-[600px] h-[100%] flex flex-col relative">
               <AdminGroupSection groupDetails={groupDetails}/>
             </div>
-            <div className="flex-1 h-[100%] flex flex-col gap-4 relative">
+            <div class="flex-1 h-[100%] flex flex-col gap-4 relative">
                 <AdminNotificationsSection/>
                 <AdminNewsSection/>
             </div>

@@ -1,6 +1,4 @@
-import UserAddress from "@synergy-project-t/ui-components/profile/UserAddress";
-import UserDetails from "@synergy-project-t/ui-components/profile/UserDetails";
-import React from "react";
+import { UserDetails, UserAddress } from "@synergy-project-t/ui-components";
 
 const userDetails = {
   email: "abcd@yopmail.com",
