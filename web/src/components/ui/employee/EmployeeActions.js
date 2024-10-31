@@ -8,6 +8,7 @@ import CustomButton from "../CustomButton";
 import { FaBuildingShield, FaHospital } from "react-icons/fa6";
 import { BiSolidCoffee } from "react-icons/bi";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import AmenitiesMap from "./AmenitiesMap";
 
 const UserAddress = ({ userDetails, amenities }) => {
   const [openMap, setOpenMap] = useState();
@@ -72,39 +73,7 @@ const UserAddress = ({ userDetails, amenities }) => {
         onClose={handleCloseMapModal}
         title={"Nearest Amenities"}
       >
-        <div className="p-4 h-[70vh] w-[60vw]">
-          <div className="flex flex-row px-5 items-center justify-between">
-            <div>
-              <CustomDropdown
-                trigger={
-                  <CustomButton type="primary">{amenityTypes.label}</CustomButton>
-                }
-                options={dropdownOptions}
-                onSelect={handleSelect}
-              />
-            </div>
-            {selectedAmenity && (
-              <div className="flex flex-row gap-5 items-center justify-between">
-                <div>{`Name: ${
-                  selectedAmenity ? selectedAmenity.name : ""
-                }`}</div>
-                <div>
-                  {`Type: ${
-                    selectedAmenity
-                      ? selectedAmenity.type.split("_").join(" ")
-                      : ""
-                  }`}
-                </div>
-              </div>
-            )}
-          </div>
-          <PhilippineMap
-            zoomLevel={5}
-            user={userDetails}
-            amenities={amenities.filter((ame) => amenityTypes.value === 'ALL' ? true : ame.type === amenityTypes.value)}
-            onMarkerClick={(amenity) => setSelectedAmenity(amenity)}
-          />
-        </div>
+        <AmenitiesMap amenities={amenities} userDetails={userDetails} />
       </CustomModal>
     </div>
   );
