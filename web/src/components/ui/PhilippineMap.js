@@ -40,6 +40,32 @@ const PhilippineMap = ({
     ];
   };
 
+  const fetchETA = async (origin, destination) => {
+    const accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+    const profiles = ["mapbox/driving", "mapbox/walking"];
+    const results = {};
+
+    for (const profile of profiles) {
+      
+      const response = await fetch(
+        `https://api.mapbox.com/directions/v5/${profile}/${origin.join(
+          ","
+        )};${destination.join(",")}?geometries=geojson&access_token=${accessToken}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      const data = await response.json();
+      results[profile.split("/")[1]] = data.routes[0].duration / 60; // Convert to minutes
+    }
+
+    return {
+      driving: results.driving ? `${Math.round(results.driving)} mins` : "N/A",
+      walking: results.walking ? `${Math.round(results.walking)} mins` : "N/A",
+    };
+  };
+
   const handleZoom = (e) => {
     const newZoom = e.viewState.zoom;
     setZoomLevel(newZoom); // Update zoom level in state
@@ -68,10 +94,13 @@ const PhilippineMap = ({
    
   }
 
-  const handleAmenitiesClick = (amenity) => {
-    onMarkerClick(amenity)
+  const handleAmenitiesClick = async (amenity) => {
     if (directionsRef.current) {
-      directionsRef.current.setDestination([amenity.address[1], amenity.address[0]]);
+      const origin = [user.address[1], user.address[0]];
+      const destination = [amenity.address[1], amenity.address[0]];
+      directionsRef.current.setDestination([destination]);
+      const eta = await fetchETA(origin, destination)
+      onMarkerClick({ ...amenity, eta })
     }
   };
 

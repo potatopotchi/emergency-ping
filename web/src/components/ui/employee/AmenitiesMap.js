@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import PhilippineMap from "../PhilippineMap";
 import CustomDropdown from "../CustomDropdown";
 import CustomButton from "../CustomButton";
-import { FaBuildingShield, FaHospital } from "react-icons/fa6";
+import { FaBuildingShield, FaCar, FaHospital } from "react-icons/fa6";
 import { BiSolidCoffee } from "react-icons/bi";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarkerAlt, FaWalking } from "react-icons/fa";
 
 const AmenitiesMap = ({ userDetails, amenities }) => {
   const [selectedAmenity, setSelectedAmenity] = useState();
@@ -45,7 +45,7 @@ const AmenitiesMap = ({ userDetails, amenities }) => {
   ];
 
   return (
-    <div className="p-4 h-[70vh] w-[60vw]">
+    <div className="p-2 h-[70vh] w-auto min-w-[70vw]">
       <div className="flex flex-row px-5 items-center justify-between">
         <div>
           <CustomDropdown
@@ -56,25 +56,41 @@ const AmenitiesMap = ({ userDetails, amenities }) => {
             onSelect={handleSelect}
           />
         </div>
-        {selectedAmenity && (
-          <div className="flex flex-row gap-5 items-center justify-between">
-            <div>{`Name: ${selectedAmenity ? selectedAmenity.name : ""}`}</div>
-            <div>
-              {`Type: ${
-                selectedAmenity ? selectedAmenity.type.split("_").join(" ") : ""
-              }`}
+      </div>
+      <div className="p-4 h-[60vh]">
+        <PhilippineMap
+          zoomLevel={5}
+          user={userDetails}
+          amenities={amenities.filter((ame) =>
+            amenityTypes.value === "ALL"
+              ? true
+              : ame.type === amenityTypes.value
+          )}
+          onMarkerClick={(amenity) => setSelectedAmenity(amenity)}
+        />
+      </div>
+
+      {selectedAmenity && (
+        <div className="flex flex-row gap-5 items-center justify-between px-8">
+          <div><span className="font-semibold">Name:</span>{` ${selectedAmenity ? selectedAmenity.name : ""}`}</div>
+          <div>
+          <span className="font-semibold">Type:</span>{` ${
+              selectedAmenity ? selectedAmenity.type.split("_").join(" ") : ""
+            }`}
+          </div>
+          <div className="flex flex-row gap-5 items-center justify-start">
+          <div className="font-semibold">{`ETA:`}</div>
+            <div className="flex flex-row gap-1 items-center justify-center">
+              <FaWalking />
+              <span>{selectedAmenity.eta.walking}</span>
+            </div>
+            <div className="flex flex-row gap-1 items-center justify-center">
+              <FaCar />
+              <span>{selectedAmenity.eta.driving}</span>
             </div>
           </div>
-        )}
-      </div>
-      <PhilippineMap
-        zoomLevel={5}
-        user={userDetails}
-        amenities={amenities.filter((ame) =>
-          amenityTypes.value === "ALL" ? true : ame.type === amenityTypes.value
-        )}
-        onMarkerClick={(amenity) => setSelectedAmenity(amenity)}
-      />
+        </div>
+      )}
     </div>
   );
 };
