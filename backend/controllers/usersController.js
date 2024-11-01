@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const User = require('../models/userModel');
 
 
-const FIELDS_TO_POPULATE = ['locationGroup', 'recentStatus'];
+const FIELDS_TO_POPULATE = [];
 
 const createUser = async (req, res) => {
 
@@ -21,10 +21,14 @@ const createUser = async (req, res) => {
 
 const getUsers = async (req, res) => {
 
+  const { fpop, select, sort, ...filter } = req.query;
+
   const users = await User
-    .find({}, '-__v -password -fsUniquifier')
-    .sort({createdAt: -1})
-    .populate(FIELDS_TO_POPULATE);
+    .find({ ...filter }, '-__v -password -fsUniquifier')
+    .sort(sort)
+    .populate(fpop)
+    .select(select)
+    .lean();
 
   return res.status(200).json(users);
 }
@@ -37,6 +41,8 @@ const getEmployeeLocations = async (req, res) => {
 const getUser = async (req, res) => {
 
   const { id } = req.params;
+  const { fpop, select } = req.query;
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No such user'});
   }
@@ -51,7 +57,9 @@ const getUser = async (req, res) => {
 
   const user = await User
     .findById(id)
-    .populate(FIELDS_TO_POPULATE);
+    .populate(fpop)
+    .select(select)
+    .lean();
 
   if (!user) {
     return res.status(404).json({error: 'No such user'});
@@ -63,6 +71,8 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
 
   const { id } = req.params;
+  const { fpop, select } = req.query;
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No such user'});
   }
@@ -77,7 +87,7 @@ const updateUser = async (req, res) => {
 
   let user = await User
     .findById(id)
-    .populate(FIELDS_TO_POPULATE);
+    .lean();
 
   if (!user) {
     return res.status(404).json({error: 'No such user'});

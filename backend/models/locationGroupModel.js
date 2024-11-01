@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const locationGroupSchema = Schema({
-  code: {
+  _id: {
     type: String,
     unique: true,
     required: true,

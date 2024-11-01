@@ -23,11 +23,6 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Sample route
-app.get('/api/message', (req, res) => {
-  res.json({ message: 'Hello from the backend!' });
-});
-
 // Register routers
 const apiRouter = express.Router();
 
@@ -44,65 +39,20 @@ const populateInitialData = async function () {
 
   // Mock data for Location Groups.
   const municipalities = JSON.parse(fs.readFileSync('data/actual_location_Groups.json', 'utf-8'));
-  // await LocationGroup.deleteMany();
-  // const municipalities = [
-  //   {
-  //     region: 'NCR',
-  //     province: 'Metro Manila',
-  //     municipality: 'Quezon City',
-  //     coordinates: [121.0486254, 14.6510546],
-  //   },
-  //   {
-  //     region: 'NCR',
-  //     province: 'Metro Manila',
-  //     municipality: 'City of Manila',
-  //     coordinates: [120.9803621, 14.5904492],
-  //   },
-  //   {
-  //     region: 'NCR',
-  //     province: 'Metro Manila',
-  //     municipality: 'Taguig City',
-  //     coordinates: [121.0744942, 14.5270538],
-  //   },
-  //   {
-  //     region: 'NCR',
-  //     province: 'Metro Manila',
-  //     municipality: 'Pasig City',
-  //     coordinates: [121.0764343, 14.5605166],
-  //   },
-  //   {
-  //     region: 'NCR',
-  //     province: 'Metro Manila',
-  //     municipality: 'Makati City',
-  //     coordinates: [121.0211226, 14.5567949],
-  //   },
-  //   {
-  //     region: 'REG7',
-  //     province: 'Cebu',
-  //     municipality: 'Cebu City',
-  //     coordinates: [123.9019209, 10.2935639],
-  //   },
-  //   {
-  //     region: 'REG3',
-  //     province: 'Tarlac',
-  //     municipality: 'Tarlac City',
-  //     coordinates: [120.5893473, 15.4861218],
-  //   },
-  // ];
 
   for (const item of municipalities) {
     const { region, province, municipality, location } = item;
-    const code = `PH_${region}_${province.replace(' ', '')}_${municipality.replace(' ', '')}`;
+    const code = `PH_${region}_${province.replace(/[\W_]+/g, '')}_${municipality.replace(/[\W_]+/g, '')}`;
     let coordinates = location.coordinates;
 
-    let exist = await LocationGroup.findOne({code}).lean();
+    let exist = await LocationGroup.findOne({ _id: code }).lean();
     if (exist) {
       continue;
     }
 
     results.push(
       LocationGroup.create({
-        code,
+        _id: code,
         country: 'Philippines',
         region,
         province,
@@ -120,7 +70,7 @@ const populateInitialData = async function () {
     locationGroups = await LocationGroup.find();
   }
 
-  // Create superuser.
+  // Create users.
   results = []
 
   const usersInfo = [

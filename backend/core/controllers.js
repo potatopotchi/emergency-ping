@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const deriveCreateEndpoint = (model, populateFields = []) => {
+const deriveCreateEndpoint = (model) => {
     
   return async (req, res) => {
       try {
@@ -18,14 +18,17 @@ const deriveCreateEndpoint = (model, populateFields = []) => {
   }
 }
 
-const deriveGetManyEndpoint = (model, populateFields = []) => {
+const deriveGetManyEndpoint = (model) => {
 
   return async (req, res) => {
     try {
+      const { fpop, select, sort, ...filter } = req.query;
+
       const records = await model
-        .find()
-        .sort({ createdAt: -1 })
-        .populate(populateFields)
+        .find({ ...filter })
+        .sort(sort)
+        .populate(fpop)
+        .select(select)
         .lean();
   
       return res.status(200).json(records);
@@ -36,17 +39,21 @@ const deriveGetManyEndpoint = (model, populateFields = []) => {
   }
 }
 
-const deriveGetOneEndpoint = (model, populateFields = []) => {
+const deriveGetOneEndpoint = (model) => {
 
   return async (req, res) => {
     try {
       const { id } = req.params;
+      const { fpop, select } = req.query;
+
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({error: 'No such record'});
       }
   
-      const record = await model.findById(id)
-        .populate(populateFields)
+      const record = await model
+        .findById(id)
+        .populate(fpop)
+        .select(select)
         .lean();
 
       if (!record) {
@@ -61,11 +68,13 @@ const deriveGetOneEndpoint = (model, populateFields = []) => {
   }
 }
 
-const deriveUpdateEndpoint = (model, populateFields = []) => {
+const deriveUpdateEndpoint = (model) => {
 
   return async (req, res) => {
     try {
       const { id } = req.params;
+      const { fpop, select } = req.query;
+
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({error: 'No such record'});
       }
@@ -80,7 +89,8 @@ const deriveUpdateEndpoint = (model, populateFields = []) => {
           { _id: id },
           { ...req.body },
         )
-        .populate(populateFields)
+        .populate(fpop)
+        .select(select)
         .lean();
 
       if (!record) {
@@ -95,16 +105,22 @@ const deriveUpdateEndpoint = (model, populateFields = []) => {
   }
 }
 
-const deriveDeleteEndpoint = (model, populateFields = []) => {
+const deriveDeleteEndpoint = (model) => {
 
   return async (req, res) => {
     try {
       const { id } = req.params;
+      const { fpop, select } = req.query;
+
       if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({error: 'No such record'});
       }
   
-      const record = await model.findById(id).populate(populateFields);
+      const record = await model
+        .findById(id)
+        .populate(fpop)
+        .select(select);
+
       if (!record) {
         return res.status(404).json({ error: 'No such record'});
       }
