@@ -2,47 +2,26 @@ import React, { useState } from "react";
 import { RiMap2Fill } from "react-icons/ri";
 import { GrDocument } from "react-icons/gr";
 import CustomModal from "../CustomModal";
-import PhilippineMap from "../PhilippineMap";
-import CustomDropdown from "../CustomDropdown";
-import CustomButton from "../CustomButton";
-import { FaBuildingShield, FaHospital } from "react-icons/fa6";
-import { BiSolidCoffee } from "react-icons/bi";
-import { FaMapMarkerAlt } from "react-icons/fa";
 import AmenitiesMap from "./AmenitiesMap";
+import Guides from "./Guides";
 
 const UserAddress = ({ userDetails, amenities }) => {
-  const [openMap, setOpenMap] = useState();
-  const [selectedAmenity, setSelectedAmenity] = useState();
-  const [amenityTypes, setAmenityTypes] = useState({ label: "All", value: "ALL", icon: <FaMapMarkerAlt /> });
-
-  const handleSelect = (option) => {
-    setAmenityTypes(option);
-  };
-
-  const dropdownOptions = [
-    { label: "All", value: "ALL", icon: <FaMapMarkerAlt /> },
-    {
-      label: "Evacuation Center",
-      value: "EVACUATION_CENTER",
-      icon: <FaBuildingShield className="text-blue-400" />,
-    },
-    {
-      label: "Hospital",
-      value: "HOSPITAL",
-      icon: <FaHospital className="text-red-400" />,
-    },
-    {
-      label: "Coffee Shop",
-      value: "COFFEE_SHOP",
-      icon: <BiSolidCoffee className="text-green-400" />,
-    },
-  ];
+  const [openModal, setOpenModal] = useState();
+  const [modalType, setModalType] = useState();
 
   const handleCloseMapModal = () => {
-    setOpenMap(false)
-    setAmenityTypes({ label: "All", value: "ALL", icon: <FaMapMarkerAlt /> })
-    setSelectedAmenity(null)
-  }
+    setOpenModal(false);
+  };
+
+  const handleOpenMap = () => {
+    setModalType("MAP");
+    setOpenModal(true);
+  };
+
+  const handleOpeGuides = () => {
+    setModalType("GUIDES");
+    setOpenModal(true);
+  };
 
   return (
     <div className="w-full h-[100%] flex flex-col relative border rounded-[0.22rem]">
@@ -54,26 +33,31 @@ const UserAddress = ({ userDetails, amenities }) => {
           className="
           flex flex-col gap-6 w-full items-center justify-center w-full max-w-md py-6 text-4xl text-red-500
           bg-transparent border-4 rounded-md border-red-500 hover:border-red-700 hover:text-red-700 hover:cursor-pointer"
-          onClick={() => setOpenMap(true)}
+          onClick={handleOpenMap}
         >
           {<RiMap2Fill className="text-6xl" />}
           MAP
         </div>
         <div
+          onClick={handleOpeGuides}
           className="
           flex flex-col gap-6 w-full items-center justify-center w-full max-w-md py-6 text-4xl text-red-500
           bg-transparent border-4 rounded-md border-red-500 hover:border-red-700 hover:text-red-700 hover:cursor-pointer"
         >
           {<GrDocument className="text-6xl" />}
-          Documents
+          EMERGENCY GUIDES
         </div>
       </div>
       <CustomModal
-        visible={openMap}
+        visible={openModal}
         onClose={handleCloseMapModal}
-        title={"Nearest Amenities"}
+        title={modalType === "MAP" ? "Nearest Amenities" : "EMERGENCY GUIDES"}
       >
-        <AmenitiesMap amenities={amenities} userDetails={userDetails} />
+        {modalType === "MAP" ? (
+          <AmenitiesMap amenities={amenities} userDetails={userDetails} />
+        ) : (
+          <Guides />
+        )}
       </CustomModal>
     </div>
   );
