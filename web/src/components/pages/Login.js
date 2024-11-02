@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from "../../assets/images/emergency-logo.png";
 import CodevLogo from "../../assets/images/logo.png";
 import CustomInput from "@synergy-project-t/ui-components/CustomInput";
 import CustomButton from "@synergy-project-t/ui-components/CustomButton";
 import { useNavigate } from "react-router-dom";
+import { AuthUtil } from "@synergy-project-t/utils";
+import { useUserAuthStore } from "@synergy-project-t/utils/stores";
 
 const LoginPage = () => {
   const navigate = useNavigate()
@@ -11,15 +13,21 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const { setUserAuth } = useUserAuthStore((state) => state);
+
   const onClick = async () => {
     setIsLoading(true);
-    const res = await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(false);
-      }, 3000);
+
+    const { data } = await AuthUtil.login("http://localhost:5000", {
+      username,
+      password
     });
-    setIsLoading(res);
-    navigate('/')
+
+    if (data?.id) {
+      setUserAuth(data);
+    }
+
+    setIsLoading(false);
   }
 
   return (
