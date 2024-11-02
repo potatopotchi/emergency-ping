@@ -48,8 +48,9 @@ const signInUser = async (req, res) => {
   return res
     .status(200)
     .cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'strict' })
-    .header('Authorization', accessToken)
-    .json({ email: user.email });
+    .cookie('cepaAuthToken', accessToken, { httpOnly: true, sameSite: 'strict' })
+    //.header('Authorization', accessToken)
+    .json({ id: user.id });
 }
 
 const refreshUserToken = async (req, res) => {

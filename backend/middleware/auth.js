@@ -4,13 +4,13 @@ const User = require('../models/userModel');
 
 
 const requireAuthentication = async (req, res, next) => {
-  const { authorization } = req.headers;
+  const authorization = req.cookies?.cepaAuthToken;
 
   if (!authorization) {
     return res.status(401).json({error: 'Authorization token required'});
   }
 
-  const token = authorization.split(' ')[1];
+  const token = authorization;
 
   try {
     const { _id, fsUniquifier } = verifyUserToken(token);
