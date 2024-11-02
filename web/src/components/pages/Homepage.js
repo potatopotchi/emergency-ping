@@ -1,6 +1,7 @@
 import { useUserAuthStore } from "@synergy-project-t/utils/stores";
 import { useEffect, useState } from "react";
 import { AdminView } from "@synergy-project-t/ui-components";
+import EmployeePage from "./Employee";
 
 const LoadingComp = <div>Loading...</div>;
 
@@ -15,7 +16,7 @@ const Homepage = () => {
         }
         else if (userAuthState?.roles?.includes("EMPLOYEE")) {
             setComponentToRender(<div>
-                EMPLOYEE VIEW
+                <EmployeePage />
             </div>)
         }
         else {

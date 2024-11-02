@@ -27,6 +27,14 @@ const UserDetails = ({ userDetails }) => {
           </div>
           <div className="flex gap-4 flex-row items-center justify-between min-w-full px-20">
             <div className="text-base font-semibold">
+              Phone number:
+            </div>
+            <div className="text-base font-normal">
+              {userDetails.phone}
+            </div>
+          </div>
+          <div className="flex gap-4 flex-row items-center justify-between min-w-full px-20">
+            <div className="text-base font-semibold">
               Email:
             </div>
             <div className="text-base font-normal">
