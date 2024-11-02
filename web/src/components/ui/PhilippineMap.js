@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState, useRef } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { NavigationControl, Marker } from 'react-map-gl';
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
@@ -6,6 +6,7 @@ import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
 import { MapGroupIcon, UserMapIcon, AmenitiesIcon } from "@synergy-project-t/ui-components";
 
 const PhilippineMap = ({
+  mapRef,
   longitude = 121.7740,
   latitude = 10.8797,
   pitch = 35,
@@ -16,8 +17,9 @@ const PhilippineMap = ({
 }) => {
   const isAmenitiesView = amenities.length > 0;
   const [zoomLevel, setZoomLevel] = useState(5);
-  const mapRef = useRef(null);
+  const ownMapRef = useRef(null);
   const directionsRef = useRef(null);
+
   // Define the initial bounds and dynamically adjust them based on zoom level
   const getDynamicBounds = (zoom) => {
     if (zoom >= 8) {
@@ -84,7 +86,7 @@ const PhilippineMap = ({
         },
       });
   
-      mapRef.current.getMap().addControl(directionsRef.current, 'top-left');
+      ownMapRef.current.getMap().addControl(directionsRef.current, 'top-left');
   
       // set user address as fixed origin
       if (user && user.address) {
@@ -107,7 +109,7 @@ const PhilippineMap = ({
   return (
     <div className="w-full h-full relative p-5">
       <Map
-        ref={mapRef}
+        ref={mapRef || ownMapRef}
         initialViewState={{
           latitude: user ? user.address[0] : latitude,
           longitude: user ? user.address[1] : longitude,
@@ -118,6 +120,7 @@ const PhilippineMap = ({
         mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
         className="w-full h-full"
         maxBounds={getDynamicBounds(zoomLevel)}
+        maxZoom={13}
         minZoom={3}
         onZoom={handleZoom}
         onLoad={handleLoadMap}
@@ -130,7 +133,7 @@ const PhilippineMap = ({
               viewId={marker.viewId}
               status={marker.status === 'SAFE' ? 'GREEN' : (marker.status === 'NEED_HELP' ? 'YELLOW' : 'RED')}
               size={zoomLevel > 7 ? 3 : 2} //in 'em'
-              onClick={onMarkerClick}
+              onClick={onMarkerClick(marker.address[0], marker.address[1])}
             />
           </Marker>
         ))}
