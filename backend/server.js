@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 const authRouter = require('./routes/auth');
 const calamitiesRouter = require('./routes/calamities');
@@ -15,13 +16,18 @@ const LocationGroup = require('./models/locationGroupModel');
 
 const fs = require('fs');
 
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:3000"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
 // Register routers
 const apiRouter = express.Router();

@@ -65,7 +65,18 @@ const getUser = async (req, res) => {
     return res.status(404).json({error: 'No such user'});
   }
 
-  return res.status(200).json(user.toObject());
+  //console.log(typeof user)
+
+  const usrObj = user//.toObject();
+
+  const usr = {
+    id: usrObj["_id"],
+    ...usrObj,
+    roles: [...usrObj.roles]//, "ADMIN", "EMPLOYEE"],
+  }
+  delete usr["_id"];
+
+  return res.status(200).json(usr);
 }
 
 const updateUser = async (req, res) => {
