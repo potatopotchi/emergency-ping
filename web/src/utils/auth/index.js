@@ -1,31 +1,36 @@
-const getUserAuth = async (baseUrl, token) => {
+import axios from "axios";
 
-    // TODO Insert BE endpoint call here
+axios.defaults.withCredentials = true;
 
-    const res = {
-        status: 200,
-        id: "userId1",
-        firstName: "Employees",
-        lastName: "Mustwashhands",
-        roles: ['EMPLOYEE', "ADMIN"],
-        // location: "Wadiya",
-        // mapX: "632",
-        // mapY: "-424"
-    };
+const getUserAuth = async ([baseUrl = 'http://localhost:5000', id]) => {
+    let res;
+    const epURL = `${baseUrl}/api/users/${id}`;
 
-    console.log("getUserAuth: "+JSON.stringify(res));
+    try {
+        res = await axios.get(epURL);
+    } catch (e) {
+        console.log("Error getting user details."+epURL);
+        throw e;
+    }
 
-    return res;
+    console.log("getUserAuth: "+JSON.stringify(res?.data));
+
+    return res?.data;
 };
 
-const login = async (baseUrl, { username, password }) => {
+const login = async (baseUrl = 'http://localhost:5000', { username, password }) => {
+    let res;
 
-    // TODO Insert BE endpoint call here
-
-    return {
-        status: 200,
-        token: "SAMPLEUSERAUTHTOKEN"
+    try {
+        res = await axios.post( baseUrl+'/api/auth/signin' , {
+            email: username,
+            password: password
+        });
+    } catch (e) {
+        console.log("Login error.")
     }
+
+    return res;
 };
 
 

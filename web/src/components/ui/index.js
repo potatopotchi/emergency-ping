@@ -1,4 +1,5 @@
 export { default as Navbar } from "./Navbar";
+export { default as Footer } from "./Footer";
 export { default as PhilippineMap } from "./PhilippineMap";
 export { default as UserIcon } from "./UserIcon";
 export { default as MapGroupIcon } from './MapGroupIcon';
