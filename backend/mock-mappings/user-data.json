@@ -23,7 +23,7 @@
                     "data": [
                         {
                             "email": "admin1@example.com",
-                            "Name": "Admin Only",
+                            "name": "Admin Only",
                             "location": "REG7_CEBU_CEBU_CITY",
                             "status": "SAFE",
                             "nearestLocations":[
@@ -51,7 +51,7 @@
                         },
                         {
                             "email": "admin1@example.com",
-                            "Name": "Super Admin",
+                            "name": "Super Admin",
                             "location": "REG7_CEBU_CEBU_CITY",
                             "status": "DISTRESS",
                             "nearestLocations":[
@@ -79,7 +79,7 @@
                         },
                         {
                             "email": "nicole@codev.com",
-                            "Name": "Nicole Sumaoang",
+                            "name": "Nicole Sumaoang",
                             "location": "REG3_TARLAC_GERONA",
                             "status": "SAFE",
                             "nearestLocations":[

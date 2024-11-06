@@ -34,8 +34,13 @@ const getUsers = async (req, res) => {
 }
 
 const getEmployeeLocations = async (req, res) => {
-  const users = await User.find({}).sort({createdAt: -1});
-  res.status(200).json(users);
+  const locations = await User.find({}).sort({createdAt: -1});
+  res.status(200).json(locations);
+}
+
+const getUserContacts = async (req, res) => {
+  const contacts = await User.find({}).sort({createdAt: -1});
+  res.status(200).json(contacts);
 }
 
 const getUser = async (req, res) => {
@@ -138,5 +143,6 @@ module.exports = {
   getUser,
   getUsers,
   getEmployeeLocations,
+  getUserContacts,
   updateUser,
 }
