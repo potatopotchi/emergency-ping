@@ -1,0 +1,55 @@
+{
+    "mappings": [
+        {
+            "request": {
+                "urlPath": "/api/getUserContacts",
+                "method": "GET",
+                "headers": {
+                    "x-api-key": {
+                        "equalTo": "test-api-key"
+                        
+                    },
+                    "authorization": {
+                            "equalTo": "Bearer test-auth-token"
+                        }
+                }
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "jsonBody": {
+                    "data": [
+                        
+                        {
+                            "codevContacts":[
+                                {
+                                    "immediateSupervisor": "0932 413 9224"
+                                },
+                                {
+                                   "itDepartment": "0939 639 9124"
+                                },
+                                {
+                                    "hrDepartment": "0939 639 9124"
+                                }
+                              ],
+                              "emergencyContacts":[
+                                {
+                                    "emergencyHotline": "911"
+                                },
+                                {
+                                   "fireDepartment": "(04593) 13638"
+                                },
+                                {
+                                    "policeDepartment": "0939 220 4252"
+                                }
+                              ]
+                        }
+                    ],
+                    "errors": null
+                }
+            }
+        }
+    ]
+}

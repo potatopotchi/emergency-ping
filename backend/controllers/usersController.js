@@ -1,0 +1,148 @@
+const mongoose = require('mongoose');
+
+const User = require('../models/userModel');
+
+
+const FIELDS_TO_POPULATE = [];
+
+const createUser = async (req, res) => {
+
+  try {
+    const user = await User
+      .validateThenCreate({ ...req.body })
+      .populate(FIELDS_TO_POPULATE);
+      
+    return user.toObject();
+  
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+const getUsers = async (req, res) => {
+
+  const { fpop, select, sort, ...filter } = req.query;
+
+  const users = await User
+    .find({ ...filter }, '-__v -password -fsUniquifier')
+    .sort(sort)
+    .populate(fpop)
+    .select(select)
+    .lean();
+
+  return res.status(200).json(users);
+}
+
+const getEmployeeLocations = async (req, res) => {
+  const locations = await User.find({}).sort({createdAt: -1});
+  res.status(200).json(locations);
+}
+
+const getUserContacts = async (req, res) => {
+  const contacts = await User.find({}).sort({createdAt: -1});
+  res.status(200).json(contacts);
+}
+
+const getUser = async (req, res) => {
+
+  const { id } = req.params;
+  const { fpop, select } = req.query;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'});
+  }
+
+  // Check for item level permission.
+  if (
+    req.user._id != id
+    && !req.user.roles.some((role) => ['SUPERUSER'].includes(role))
+  ) {
+    return res.status(403).json({ error: 'Request not allowed' });
+  }
+
+  const user = await User
+    .findById(id)
+    .populate(fpop)
+    .select(select)
+    .lean();
+
+  if (!user) {
+    return res.status(404).json({error: 'No such user'});
+  }
+
+  //console.log(typeof user)
+
+  const usrObj = user//.toObject();
+
+  const usr = {
+    id: usrObj["_id"],
+    ...usrObj,
+    roles: [...usrObj.roles]//, "ADMIN", "EMPLOYEE"],
+  }
+  delete usr["_id"];
+
+  return res.status(200).json(usr);
+}
+
+const updateUser = async (req, res) => {
+
+  const { id } = req.params;
+  const { fpop, select } = req.query;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'});
+  }
+
+  // Check for item level permission.
+  if (
+    req.user._id != id
+    && !req.user.roles.some((role) => ['SUPERUSER'].includes(role))
+  ) {
+    return res.status(403).json({ error: 'Request not allowed' });
+  }
+
+  let user = await User
+    .findById(id)
+    .lean();
+
+  if (!user) {
+    return res.status(404).json({error: 'No such user'});
+  }
+
+  try {
+    user = await User.validateOneThenUpdate({ _id: id }, { ...req.body });
+    return res.status(200).json(user.toObject());
+  
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+}
+
+const deleteUser = async (req, res) => {
+  
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'});
+  }
+
+  const user = await User
+    .findByIdAndDelete(id)
+    .populate(FIELDS_TO_POPULATE);
+
+  if (!user) {
+    return res.status(404).json({ error: 'No such user' });
+  }
+
+  return res.status(200).json(user.toObject());
+}
+  
+
+module.exports = {
+  createUser,
+  deleteUser,
+  getUser,
+  getUsers,
+  getEmployeeLocations,
+  getUserContacts,
+  updateUser,
+}
